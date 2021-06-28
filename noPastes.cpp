@@ -9,6 +9,7 @@
 #include <thread>
 #include <Game.h>
 #include <offsets.h>
+#include <memory.h>
 
 
 Memory apex;
@@ -31,7 +32,7 @@ static void itemGlowThread()
 	{
 		if (!lookingForProcs)
 		{
-			for (int i = 0; i >= 10000)
+			for (int i = 0; i >= 10000;i++)
 			{
 				uint64_t entityList = apexBase + OFFSET_ENTITYLIST;
 				uint64_t ent = 0;
@@ -42,12 +43,12 @@ static void itemGlowThread()
 				int curentEntItemID = apex<int>(apexBase + ent + OFFSET_ITEM_ID);
 				if (curentEntItemID == 47)
 				{
-					write<int>(Entity + OFFSET_GLOW_ENABLE, 1);
-					write<int>(Entity + OFFSET_GLOW_THROUGH_WALLS, 2);
-					write<GlowMode>(Entity + GLOW_TYPE, { 101,102,46,96 });
-					write<float>(Entity + GLOW_COLOR_R, 0.f);
-					write<float>(Entity + GLOW_COLOR_G, 122.f);
-					write<float>(Entity + GLOW_COLOR_B, 122.f);
+					apex.Write<int>(ent + OFFSET_GLOW_ENABLE, 1);
+					apex.Write<int>(ent + OFFSET_GLOW_THROUGH_WALLS, 2);
+					apex.Write<GlowMode>(ent + GLOW_TYPE, { 101,102,46,96 });
+					apex.Write<float>(ent + GLOW_COLOR_R, 0.f);
+					apex.Write<float>(ent + GLOW_COLOR_G, 122.f);
+					apex.Write<float>(ent + GLOW_COLOR_B, 122.f);
 				}
 			}
 		}
@@ -76,7 +77,7 @@ int main(int argc, char* argv[])
 		//check if procces is found or not. if found start cheat
 		if (apex.get_proc_status() != process_status::FOUND_READY)
 		{
-			printf("Looking for apex process...\n")
+			printf("Looking for apex process...\n");
 			apex.open_proc(apexProc);
 
 			if (apex.get_proc_status() == process_status::FOUND_READY)
@@ -113,7 +114,7 @@ int main(int argc, char* argv[])
 		*/
 		if (apexFound)
 		{
-			lookingForProcs == false
+			lookingForProcs == false;
 		}
 	}
 
