@@ -45,7 +45,8 @@ static void itemGlowThread()
 				//apex.Read<uint64_t>(entityList,BaseEnt)
 				if (ent == 0) continue;
 
-				int curentEntItemID = apex<int>(apexBase + ent + OFFSET_ITEM_ID);
+				int curentEntItemID;
+				apex.Read<int>(apexBase + ent + OFFSET_ITEM_ID, curentEntItemID);
 				if (curentEntItemID == 47)
 				{
 					apex.Write<int>(ent + OFFSET_GLOW_ENABLE, 1);

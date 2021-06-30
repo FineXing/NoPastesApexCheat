@@ -29,54 +29,7 @@ inline bool isMatch(const PBYTE addr, const PBYTE pat, const PBYTE msk)
 	return false;
 }
 
-//Credits: learn_more, stevemk14ebr
-inline size_t findPattern(const PBYTE rangeStart, size_t len, const char* pattern)
-{
-	size_t l = strlen(pattern);
-	PBYTE patt_base = static_cast<PBYTE>(malloc(l >> 1));
-	PBYTE msk_base = static_cast<PBYTE>(malloc(l >> 1));
-	PBYTE pat = patt_base;
-	PBYTE msk = msk_base;
-	if (pat && msk)
-	{
-		l = 0;
-		while (*pattern)
-		{
-			if (*pattern == ' ')
-				pattern++;
-			if (!*pattern)
-				break;
-			if (*(PBYTE)pattern == (BYTE)'\?')
-			{
-				*pat++ = 0;
-				*msk++ = '?';
-				pattern += ((*(PWORD)pattern == (WORD)'\?\?') ? 2 : 1);
-			}
-			else
-			{
-				*pat++ = getByte(pattern);
-				*msk++ = 'x';
-				pattern += 2;
-			}
-			l++;
-		}
-		*msk = 0;
-		pat = patt_base;
-		msk = msk_base;
-		for (size_t n = 0; n < (len - l); ++n)
-		{
-			if (isMatch(rangeStart + n, patt_base, msk_base))
-			{
-				free(patt_base);
-				free(msk_base);
-				return n;
-			}
-		}
-		free(patt_base);
-		free(msk_base);
-	}
-	return -1;
-}
+size_t findPattern(const PBYTE rangeStart, size_t len, const char* pattern);
 
 typedef struct Process
 {
