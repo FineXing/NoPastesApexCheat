@@ -120,7 +120,7 @@ int main(int argc, char* argv[])
 		*/
 		if (apexFound)
 		{
-			printf("Starting Glow Thread")
+			printf("Starting Glow Thread");
 			std::thread glowThread;
 			glowThread.~thread();
 			glowThread = std::thread(itemGlowThread);
