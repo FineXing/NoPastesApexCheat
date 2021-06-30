@@ -7,9 +7,9 @@
 #include <iostream>
 #include <cfloat>
 #include <thread>
-#include <Game.h>
-#include <offsets.h>
-#include <memory.h>
+#include "Game.h"
+#include "offsets.h"
+#include "memory.h"
 
 
 Memory apex;
