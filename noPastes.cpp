@@ -26,10 +26,13 @@ struct GlowMode
 {
 	int8_t GeneralGlowMode, BorderGlowMode, BorderSize, TransparentLevel;
 };
+
 static void itemGlowThread()
 {
+	printf("Started Glow Thread");
 	while (glowItems == true)
 	{
+
 		if (!lookingForProcs)
 		{
 			for (int i = 0; i >= 10000;i++)
@@ -38,6 +41,8 @@ static void itemGlowThread()
 				uint64_t ent = 0;
 
 				apex.Read<uint64_t>(entityList + ((uint64_t)i << 5), ent);
+				//uint64_t BaseEnt;
+				//apex.Read<uint64_t>(entityList,BaseEnt)
 				if (ent == 0) continue;
 
 				int curentEntItemID = apex<int>(apexBase + ent + OFFSET_ITEM_ID);
@@ -90,6 +95,7 @@ int main(int argc, char* argv[])
 		}
 		else
 		{
+
 			apex.check_proc();
 		}
 /*
@@ -114,12 +120,17 @@ int main(int argc, char* argv[])
 		*/
 		if (apexFound)
 		{
-			lookingForProcs == false;
+			printf("Starting Glow Thread")
+			std::thread glowThread;
+			glowThread.~thread();
+			glowThread = std::thread(itemGlowThread);
+			glowThread.detach();
 		}
 	}
-
+	printf("Infinite While Loop Starting");
 	while (lookingForProcs== false)
 	{
-		std::thread glowThread;
+		std::this_thread::sleep_for(std::chrono::seconds(10));
+		apex.check_proc();
 	}
 }
