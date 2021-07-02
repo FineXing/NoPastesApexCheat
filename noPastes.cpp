@@ -40,9 +40,8 @@ static void itemGlowThread()
 				uint64_t entityList = apexBase + OFFSET_ENTITYLIST;
 				uint64_t ent = 0;
 
-				apex.Read<uint64_t>(entityList + ((uint64_t)i << 5), ent);
-				//uint64_t BaseEnt;
-				//apex.Read<uint64_t>(entityList,BaseEnt)
+				uint64_t ent = 0;
+				apex_mem.Read<uint64_t>(entitylist + ((uint64_t)i << 5), ent);
 				if (ent == 0) continue;
 
 				int curentEntItemID;
