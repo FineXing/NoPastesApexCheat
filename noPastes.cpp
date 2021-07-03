@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <string.h>
+#include <string>
 #include <random>
 #include <chrono>
 #include <iostream>
@@ -30,20 +31,6 @@ struct GlowMode
 static void itemGlowThread()
 {
 	printf("Started Glow Thread\n");
-	for (int i = 0; i < 10000; i++)
-	{
-		uint64_t entityList = apexBase + OFFSET_ENTITYLIST;
-		uint64_t ent = 0;
-		apex.Read<uint64_t>(entityList + ((uint64_t)i << 5), ent);
-
-		int curentEntItemID;
-		apex.Read<int>(ent + OFFSET_ITEM_ID, curentEntItemID);
-
-		std::string name = "";
-		apex.Read<std::string>(ent + 0x0580, name);
-		std::string thing = name + " " + curentEntItemID + "\n";
-		printf("test: ", thing)
-	}
 
 	while (true);
 	{
@@ -57,7 +44,7 @@ static void itemGlowThread()
 			apex.Read<int>(ent + OFFSET_ITEM_ID, curentEntItemID);
 
 			apex.Read<int>(ent + OFFSET_ITEM_ID, curentEntItemID);
-			if (curentEntItemID == 47)
+			if (curentEntItemID == 77 || curentEntItemID == 130 || curentEntItemID == 133 || curentEntItemID == 168 || curentEntItemID == 169 || curentEntItemID == 182 || curentEntItemID == 183 || curentEntItemID == 177)
 			{
 				apex.Write<int>(ent + OFFSET_GLOW_ENABLE, 1);
 				apex.Write<int>(ent + OFFSET_GLOW_THROUGH_WALLS, 2);
@@ -65,6 +52,15 @@ static void itemGlowThread()
 				apex.Write<float>(ent + GLOW_COLOR_R, 0.f);
 				apex.Write<float>(ent + GLOW_COLOR_G, 122.f);
 				apex.Write<float>(ent + GLOW_COLOR_B, 122.f);
+			}
+			else if (curentEntItemID == 47 || curentEntItemID == 30)
+			{
+				apex.Write<int>(ent + OFFSET_GLOW_ENABLE, 1);
+				apex.Write<int>(ent + OFFSET_GLOW_THROUGH_WALLS, 2);
+				apex.Write<GlowMode>(ent + GLOW_TYPE, { 101,102,46,96 });
+				apex.Write<float>(ent + GLOW_COLOR_R, 122.f);
+				apex.Write<float>(ent + GLOW_COLOR_G, 0.f);
+				apex.Write<float>(ent + GLOW_COLOR_B, 0.f);
 			}
 		}
 
