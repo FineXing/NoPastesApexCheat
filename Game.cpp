@@ -1,1 +1,0 @@
-extern Memory apex_mem;

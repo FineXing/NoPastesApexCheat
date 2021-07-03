@@ -29,34 +29,45 @@ struct GlowMode
 
 static void itemGlowThread()
 {
-	printf("Started Glow Thread");
-	while (glowItems == true)
+	printf("Started Glow Thread\n");
+	for (int i = 0; i < 10000; i++)
 	{
+		uint64_t entityList = apexBase + OFFSET_ENTITYLIST;
+		uint64_t ent = 0;
+		apex.Read<uint64_t>(entityList + ((uint64_t)i << 5), ent);
 
-		if (!lookingForProcs)
+		int curentEntItemID;
+		apex.Read<int>(ent + OFFSET_ITEM_ID, curentEntItemID);
+
+		std::string name = "";
+		apex.Read<std::string>(ent + 0x0580, name);
+		std::string thing = name + " " + curentEntItemID + "\n";
+		printf("test: ", thing)
+	}
+
+	while (true);
+	{
+		for (int i = 0; i < 10000; i++)
 		{
-			for (int i = 0; i >= 10000;i++)
+			uint64_t entityList = apexBase + OFFSET_ENTITYLIST;
+			uint64_t ent = 0;
+			apex.Read<uint64_t>(entityList + ((uint64_t)i << 5), ent);
+
+			int curentEntItemID;
+			apex.Read<int>(ent + OFFSET_ITEM_ID, curentEntItemID);
+
+			apex.Read<int>(ent + OFFSET_ITEM_ID, curentEntItemID);
+			if (curentEntItemID == 47)
 			{
-				uint64_t entityList = apexBase + OFFSET_ENTITYLIST;
-				uint64_t ent = 0;
-
-				uint64_t ent = 0;
-				apex_mem.Read<uint64_t>(entitylist + ((uint64_t)i << 5), ent);
-				if (ent == 0) continue;
-
-				int curentEntItemID;
-				apex.Read<int>(apexBase + ent + OFFSET_ITEM_ID, curentEntItemID);
-				if (curentEntItemID == 47)
-				{
-					apex.Write<int>(ent + OFFSET_GLOW_ENABLE, 1);
-					apex.Write<int>(ent + OFFSET_GLOW_THROUGH_WALLS, 2);
-					apex.Write<GlowMode>(ent + GLOW_TYPE, { 101,102,46,96 });
-					apex.Write<float>(ent + GLOW_COLOR_R, 0.f);
-					apex.Write<float>(ent + GLOW_COLOR_G, 122.f);
-					apex.Write<float>(ent + GLOW_COLOR_B, 122.f);
-				}
+				apex.Write<int>(ent + OFFSET_GLOW_ENABLE, 1);
+				apex.Write<int>(ent + OFFSET_GLOW_THROUGH_WALLS, 2);
+				apex.Write<GlowMode>(ent + GLOW_TYPE, { 101,102,46,96 });
+				apex.Write<float>(ent + GLOW_COLOR_R, 0.f);
+				apex.Write<float>(ent + GLOW_COLOR_G, 122.f);
+				apex.Write<float>(ent + GLOW_COLOR_B, 122.f);
 			}
 		}
+
 	}
 
 }
@@ -120,17 +131,21 @@ int main(int argc, char* argv[])
 		*/
 		if (apexFound)
 		{
-			printf("Starting Glow Thread");
-			std::thread glowThread;
-			glowThread.~thread();
-			glowThread = std::thread(itemGlowThread);
-			glowThread.detach();
+			lookingForProcs = false;
 		}
 	}
+	printf("Starting Glow Thread\n");
+	std::thread glowThread;
+	glowThread.~thread();
+	glowThread = std::thread(itemGlowThread);
+	glowThread.detach();
+
+	std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	printf("Infinite While Loop Starting");
-	while (lookingForProcs== false)
+	while (lookingForProcs == false)
 	{
-		std::this_thread::sleep_for(std::chrono::seconds(10));
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 		apex.check_proc();
 	}
 }
+
