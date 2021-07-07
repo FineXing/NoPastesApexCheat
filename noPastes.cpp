@@ -43,7 +43,7 @@ static void aimBotThread()
 
 static void playerGlowThread()
 {
-	printf("Started Player Glow Thread")
+	printf("Started Player Glow Thread");
 	while (lookingForProcs == false)
 	{
 		for (int i = 0; i < 10000; i++)
@@ -61,9 +61,13 @@ static void playerGlowThread()
 				continue;
 			}
 
+			uint64_t playerOffsetName = 0;
+			apex.Read<uint64_t>(ent + OFFSET_NAME, playerOffsetName);
+			if (playerOffsetName == 125780153691248)continue;
+
 			int playerTeamNum;
 			apex.Read<int>(ent + OFFSET_TEAM, playerTeamNum);
-			if (playerTeamNum < 0 || playerTeamNum > 50)
+			if (playerTeamNum < 0 && playerTeamNum > 50)
 			{
 				continue;
 			}
