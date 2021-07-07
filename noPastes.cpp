@@ -25,7 +25,15 @@ uint64_t pNetworkName;
 bool glowItems = true;
 
 bool lookingForProcs = true; //read write - controls when cheat starts
-
+struct ClientClass {
+	uint64_t pCreateFn;
+	uint64_t pCreateEventFn;
+	uint64_t pNetworkName;
+	uint64_t pRecvTable;
+	uint64_t pNext;
+	uint32_t ClassID;
+	uint32_t ClassSize;
+};
 struct GlowMode
 {
 	int8_t GeneralGlowMode, BorderGlowMode, BorderSize, TransparentLevel;
@@ -44,7 +52,7 @@ void get_class_name(uint64_t entity_ptr, char* out_str)
 	const uint64_t client_class_ptr = get_client_class + disp + 7;
 
 	ClientClass client_class;
-	apex<ClientClass>(client_class_ptr, client_class);
+	apex.Read<ClientClass>(client_class_ptr, client_class);
 
 	apex.ReadArray<char>(client_class.pNetworkName, out_str, 32);
 }
@@ -71,37 +79,35 @@ static void playerGlowThread()
 			uint64_t entityList = apexBase + OFFSET_ENTITYLIST;
 			uint64_t ent = 0;
 			apex.Read<uint64_t>(entityList + ((uint64_t)i << 5), ent);
-
-			uint64_t localPlayer = 0;
-			apex.Read<uint64_t>(apexBase + OFFSET_LOCAL_ENT, localPlayer);
-			if (localPlayer == 0) continue;
-			
-			if (ent == localPlayer)
-			{
-				continue;
-			}
 			char class_name[33] = {};
 			get_class_name(ent, class_name);
 			if (class_name == "CPlayer")
 			{
-				continue;
+				uint64_t localPlayer = 0;
+				apex.Read<uint64_t>(apexBase + OFFSET_LOCAL_ENT, localPlayer);
+				if (localPlayer == 0) continue;
+
+				if (ent == localPlayer)
+				{
+					continue;
+				}
+
+
+				int playerTeamNum;
+				apex.Read<int>(ent + OFFSET_TEAM, playerTeamNum);
+				if (playerTeamNum < 0 && playerTeamNum > 50)
+				{
+					continue;
+				}
+
+				apex.Write<int>(ent + OFFSET_GLOW_ENABLE, 1);
+				apex.Write<int>(ent + OFFSET_GLOW_THROUGH_WALLS, 2);
+				apex.Write<GlowMode>(ent + GLOW_TYPE, { 101,102,46,96 });
+				apex.Write<float>(ent + GLOW_COLOR_R, 0.f);
+				apex.Write<float>(ent + GLOW_COLOR_G, 122.f);
+				apex.Write<float>(ent + GLOW_COLOR_B, 0.f);
+
 			}
-
-			int playerTeamNum;
-			apex.Read<int>(ent + OFFSET_TEAM, playerTeamNum);
-			if (playerTeamNum < 0 && playerTeamNum > 50)
-			{
-				continue;
-			}
-
-			apex.Write<int>(ent + OFFSET_GLOW_ENABLE, 1);
-			apex.Write<int>(ent + OFFSET_GLOW_THROUGH_WALLS, 2);
-			apex.Write<GlowMode>(ent + GLOW_TYPE, { 101,102,46,96 });
-			apex.Write<float>(ent + GLOW_COLOR_R, 0.f);
-			apex.Write<float>(ent + GLOW_COLOR_G, 122.f);
-			apex.Write<float>(ent + GLOW_COLOR_B, 0.f);
-			
-
 		}
 
 	}
