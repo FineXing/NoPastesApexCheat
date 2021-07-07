@@ -20,42 +20,16 @@ Memory client;
 uint64_t apexBase; // apex base addr
 uint64_t clientBase; // client base addr
 
-uint64_t pNetworkName;
 
 bool glowItems = true;
 
 bool lookingForProcs = true; //read write - controls when cheat starts
-struct ClientClass {
-	uint64_t pCreateFn;
-	uint64_t pCreateEventFn;
-	uint64_t pNetworkName;
-	uint64_t pRecvTable;
-	uint64_t pNext;
-	uint32_t ClassID;
-	uint32_t ClassSize;
-};
+
 struct GlowMode
 {
 	int8_t GeneralGlowMode, BorderGlowMode, BorderSize, TransparentLevel;
 };
 
-void get_class_name(uint64_t entity_ptr, char* out_str)
-{
-	uint64_t client_networkable_vtable;
-	apex.Read<uint64_t>(entity_ptr + 8 * 3, client_networkable_vtable);
-
-	uint64_t get_client_class;
-	apex.Read<uint64_t>(client_networkable_vtable + 8 * 3, get_client_class);
-
-	uint32_t disp;
-	apex.Read<uint32_t>(get_client_class + 3, disp);
-	const uint64_t client_class_ptr = get_client_class + disp + 7;
-
-	ClientClass client_class;
-	apex.Read<ClientClass>(client_class_ptr, client_class);
-
-	apex.ReadArray<char>(client_class.pNetworkName, out_str, 32);
-}
 
 static void aimBotThread()
 {
@@ -74,7 +48,7 @@ static void playerGlowThread()
 	printf("Started Player Glow Thread");
 	while (lookingForProcs == false)
 	{
-		for (int i = 0; i < 10000; i++)
+		for (int i = 0; i < 100; i++)
 		{
 			uint64_t entityList = apexBase + OFFSET_ENTITYLIST;
 			uint64_t ent = 0;
@@ -90,20 +64,17 @@ static void playerGlowThread()
 					continue;
 				}
 
-
-				int playerTeamNum;
-				apex.Read<int>(ent + OFFSET_TEAM, playerTeamNum);
-				if (playerTeamNum < 0 && playerTeamNum > 50)
+				int entTeam;
+				apex.Read<int>(ent + OFFSET_TEAM, entTeam);
+				if (entTeam > 0 && entTeam < 60)
 				{
-					continue;
+					apex.Write<int>(ent + OFFSET_GLOW_ENABLE, 1);
+					apex.Write<int>(ent + OFFSET_GLOW_THROUGH_WALLS, 2);
+					apex.Write<GlowMode>(ent + GLOW_TYPE, { 101,102,46,96 });
+					apex.Write<float>(ent + GLOW_COLOR_R, 0.f);
+					apex.Write<float>(ent + GLOW_COLOR_G, 122.f);
+					apex.Write<float>(ent + GLOW_COLOR_B, 0.f);
 				}
-
-				apex.Write<int>(ent + OFFSET_GLOW_ENABLE, 1);
-				apex.Write<int>(ent + OFFSET_GLOW_THROUGH_WALLS, 2);
-				apex.Write<GlowMode>(ent + GLOW_TYPE, { 101,102,46,96 });
-				apex.Write<float>(ent + GLOW_COLOR_R, 0.f);
-				apex.Write<float>(ent + GLOW_COLOR_G, 122.f);
-				apex.Write<float>(ent + GLOW_COLOR_B, 0.f);
 		}
 
 	}
