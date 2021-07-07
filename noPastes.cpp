@@ -11,6 +11,7 @@
 #include "Game.h"
 #include "offsets.h"
 #include "memory.h"
+#include "ids.h"
 
 
 Memory apex;
@@ -28,11 +29,62 @@ struct GlowMode
 	int8_t GeneralGlowMode, BorderGlowMode, BorderSize, TransparentLevel;
 };
 
+static void aimBotThread()
+{
+	while (lookingForProcs ==false)
+	{
+		uint64_t localPlayer = 0;
+		apex.Read<uint64_t>(apexBase + OFFSET_LOCAL_ENT, localPlayer);
+		if (localPlayer = 0)continue;
+
+
+	}
+}
+
+static void playerGlowThread()
+{
+	while (lookingForProcs == false)
+	{
+		for (int i = 0; i < 10000; i++)
+		{
+			uint64_t entityList = apexBase + OFFSET_ENTITYLIST;
+			uint64_t ent = 0;
+			apex.Read<uint64_t>(entityList + ((uint64_t)i << 5), ent);
+
+			uint64_t localPlayer = 0;
+			apex.Read<uint64_t>(g_Base + OFFSET_LOCAL_ENT, localPlayer);
+			if (localPlayer == 0) continue;
+			
+			if (ent == localPlayer)
+			{
+				continue;
+			}
+
+			int playerTeamNum;
+			apex.Read<uint64_t>(ent + OFFSET_TEAM, playerTeamNum);
+			if (playerTeamNum < 0 || playerTeamNum > 50)
+			{
+				continue;
+			}
+
+			apex.Write<int>(ent + OFFSET_GLOW_ENABLE, 1);
+			apex.Write<int>(ent + OFFSET_GLOW_THROUGH_WALLS, 2);
+			apex.Write<GlowMode>(ent + GLOW_TYPE, { 101,102,46,96 });
+			apex.Write<float>(ent + GLOW_COLOR_R, 0.f);
+			apex.Write<float>(ent + GLOW_COLOR_G, 122.f);
+			apex.Write<float>(ent + GLOW_COLOR_B, 0.f);
+			}
+
+		}
+
+	}
+}
+
 static void itemGlowThread()
 {
 	printf("Started Glow Thread\n");
 
-	while (true);
+	while (lookingForProcs == false)
 	{
 		for (int i = 0; i < 10000; i++)
 		{
@@ -42,9 +94,7 @@ static void itemGlowThread()
 
 			int curentEntItemID;
 			apex.Read<int>(ent + OFFSET_ITEM_ID, curentEntItemID);
-
-			apex.Read<int>(ent + OFFSET_ITEM_ID, curentEntItemID);
-			if (curentEntItemID == 77 || curentEntItemID == 130 || curentEntItemID == 133 || curentEntItemID == 168 || curentEntItemID == 169 || curentEntItemID == 182 || curentEntItemID == 183 || curentEntItemID == 177)
+			if (curentEntItemID == LIGHT_ROUNDS || curentEntItemID == LIGHT_MAGAZINE_LV3 || curentEntItemID == HEAVY_MAGAZINE_LV3 || curentEntItemID == HEAVY_ROUNDS || curentEntItemID == BACKPACK_LV3 || curentEntItemID == HCOG_CLASSIC || curentEntItemID == HCOG_BRUISER || curentEntItemID == BARREL_STABILIZER_LV3)
 			{
 				apex.Write<int>(ent + OFFSET_GLOW_ENABLE, 1);
 				apex.Write<int>(ent + OFFSET_GLOW_THROUGH_WALLS, 2);
@@ -53,7 +103,7 @@ static void itemGlowThread()
 				apex.Write<float>(ent + GLOW_COLOR_G, 122.f);
 				apex.Write<float>(ent + GLOW_COLOR_B, 122.f);
 			}
-			else if (curentEntItemID == 47 || curentEntItemID == 30)
+			else if (curentEntItemID == R99 || curentEntItemID == HEMLOCK || curentEntItemID == GOLD_KRABER || curentEntItemID == BODY_ARMOR_EVO3)
 			{
 				apex.Write<int>(ent + OFFSET_GLOW_ENABLE, 1);
 				apex.Write<int>(ent + OFFSET_GLOW_THROUGH_WALLS, 2);
@@ -130,14 +180,21 @@ int main(int argc, char* argv[])
 			lookingForProcs = false;
 		}
 	}
-	printf("Starting Glow Thread\n");
-	std::thread glowThread;
-	glowThread.~thread();
-	glowThread = std::thread(itemGlowThread);
-	glowThread.detach();
+	printf("Starting Item Glow Thread\n");
+	std::thread glowItemThread;
+	glowItemThread.~thread();
+	glowItemThread = std::thread(itemGlowThread);
+	glowItemThread.detach();
+
+
+	printf("Starting Player Glow Thread\n")
+	std::thread glowPlayerThread;
+	glowPlayerThread.~thread();
+	glowPlayerThread = std::thread(playerGlowThread);
+	glowPlayerThread.detach();
 
 	std::this_thread::sleep_for(std::chrono::milliseconds(1));
-	printf("Infinite While Loop Starting");
+	printf("Infinite While Loop Starting\n");
 	while (lookingForProcs == false)
 	{
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
