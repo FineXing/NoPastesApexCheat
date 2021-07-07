@@ -45,7 +45,7 @@ static void aimBotThread()
 
 static void playerGlowThread()
 {
-	printf("Started Player Glow Thread");
+	printf("Started Player Glow Thread\n");
 	while (lookingForProcs == false)
 	{
 		for (int i = 0; i < 100; i++)
