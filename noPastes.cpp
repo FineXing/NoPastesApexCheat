@@ -52,7 +52,7 @@ static void playerGlowThread()
 			apex.Read<uint64_t>(entityList + ((uint64_t)i << 5), ent);
 
 			uint64_t localPlayer = 0;
-			apex.Read<uint64_t>(g_Base + OFFSET_LOCAL_ENT, localPlayer);
+			apex.Read<uint64_t>(apexBase + OFFSET_LOCAL_ENT, localPlayer);
 			if (localPlayer == 0) continue;
 			
 			if (ent == localPlayer)
@@ -61,7 +61,7 @@ static void playerGlowThread()
 			}
 
 			int playerTeamNum;
-			apex.Read<uint64_t>(ent + OFFSET_TEAM, playerTeamNum);
+			apex.Read<int>(ent + OFFSET_TEAM, playerTeamNum);
 			if (playerTeamNum < 0 || playerTeamNum > 50)
 			{
 				continue;
