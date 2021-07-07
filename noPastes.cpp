@@ -20,6 +20,8 @@ Memory client;
 uint64_t apexBase; // apex base addr
 uint64_t clientBase; // client base addr
 
+uint64_t pNetworkName;
+
 bool glowItems = true;
 
 bool lookingForProcs = true; //read write - controls when cheat starts
@@ -28,6 +30,24 @@ struct GlowMode
 {
 	int8_t GeneralGlowMode, BorderGlowMode, BorderSize, TransparentLevel;
 };
+
+void get_class_name(uint64_t entity_ptr, char* out_str)
+{
+	uint64_t client_networkable_vtable;
+	apex.Read<uint64_t>(entity_ptr + 8 * 3, client_networkable_vtable);
+
+	uint64_t get_client_class;
+	apex.Read<uint64_t>(client_networkable_vtable + 8 * 3, get_client_class);
+
+	uint32_t disp;
+	apex.Read<uint32_t>(get_client_class + 3, disp);
+	const uint64_t client_class_ptr = get_client_class + disp + 7;
+
+	ClientClass client_class;
+	apex<ClientClass>(client_class_ptr, client_class);
+
+	apex.ReadArray<char>(client_class.pNetworkName, out_str, 32);
+}
 
 static void aimBotThread()
 {
@@ -60,10 +80,12 @@ static void playerGlowThread()
 			{
 				continue;
 			}
-
-			uint64_t playerOffsetName = 0;
-			apex.Read<uint64_t>(ent + OFFSET_NAME, playerOffsetName);
-			if (playerOffsetName == 125780153691248)continue;
+			char class_name[33] = {};
+			get_class_name(ent, class_name);
+			if (class_name == "CPlayer")
+			{
+				continue;
+			}
 
 			int playerTeamNum;
 			apex.Read<int>(ent + OFFSET_TEAM, playerTeamNum);
@@ -108,7 +130,7 @@ static void itemGlowThread()
 				apex.Write<float>(ent + GLOW_COLOR_G, 122.f);
 				apex.Write<float>(ent + GLOW_COLOR_B, 122.f);
 			}
-			else if (curentEntItemID == R99 || curentEntItemID == HEMLOCK || curentEntItemID == GOLD_KRABER || curentEntItemID == BODY_ARMOR_EVO3)
+			else if (curentEntItemID == R99 || curentEntItemID == HEMLOCK || curentEntItemID == GOLD_KRABER || curentEntItemID == BODY_ARMOR_EVO3 || curentEntItemID == BODY_ARMOR_EVO4 || curentEntItemID == KNOCKDOWN_SHIELD_LV4 || curentEntItemID == R301)
 			{
 				apex.Write<int>(ent + OFFSET_GLOW_ENABLE, 1);
 				apex.Write<int>(ent + OFFSET_GLOW_THROUGH_WALLS, 2);
