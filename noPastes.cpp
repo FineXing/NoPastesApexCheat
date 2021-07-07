@@ -43,6 +43,7 @@ static void aimBotThread()
 
 static void playerGlowThread()
 {
+	printf("Started Player Glow Thread")
 	while (lookingForProcs == false)
 	{
 		for (int i = 0; i < 10000; i++)
@@ -73,7 +74,7 @@ static void playerGlowThread()
 			apex.Write<float>(ent + GLOW_COLOR_R, 0.f);
 			apex.Write<float>(ent + GLOW_COLOR_G, 122.f);
 			apex.Write<float>(ent + GLOW_COLOR_B, 0.f);
-			}
+			
 
 		}
 
@@ -82,7 +83,7 @@ static void playerGlowThread()
 
 static void itemGlowThread()
 {
-	printf("Started Glow Thread\n");
+	printf("Started Item Glow Thread\n");
 
 	while (lookingForProcs == false)
 	{
@@ -187,7 +188,7 @@ int main(int argc, char* argv[])
 	glowItemThread.detach();
 
 
-	printf("Starting Player Glow Thread\n")
+	printf("Starting Player Glow Thread\n");
 	std::thread glowPlayerThread;
 	glowPlayerThread.~thread();
 	glowPlayerThread = std::thread(playerGlowThread);
