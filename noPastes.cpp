@@ -79,10 +79,8 @@ static void playerGlowThread()
 			uint64_t entityList = apexBase + OFFSET_ENTITYLIST;
 			uint64_t ent = 0;
 			apex.Read<uint64_t>(entityList + ((uint64_t)i << 5), ent);
-			char class_name[33] = {};
-			get_class_name(ent, class_name);
-			if (class_name == "CPlayer")
-			{
+
+
 				uint64_t localPlayer = 0;
 				apex.Read<uint64_t>(apexBase + OFFSET_LOCAL_ENT, localPlayer);
 				if (localPlayer == 0) continue;
@@ -106,8 +104,6 @@ static void playerGlowThread()
 				apex.Write<float>(ent + GLOW_COLOR_R, 0.f);
 				apex.Write<float>(ent + GLOW_COLOR_G, 122.f);
 				apex.Write<float>(ent + GLOW_COLOR_B, 0.f);
-
-			}
 		}
 
 	}
