@@ -8,10 +8,10 @@
 #include <iostream>
 #include <cfloat>
 #include <thread>
-#include "Game.h"
 #include "offsets.h"
 #include "memory.h"
 #include "ids.h"
+#include "Game.h"
 
 
 Memory apex;
@@ -20,15 +20,13 @@ Memory client;
 uint64_t apexBase; // apex base addr
 uint64_t clientBase; // client base addr
 
+bool v1 == false;
 
 bool glowItems = true;
 
 bool lookingForProcs = true; //read write - controls when cheat starts
 
-struct GlowMode
-{
-	int8_t GeneralGlowMode, BorderGlowMode, BorderSize, TransparentLevel;
-};
+
 
 
 static void aimBotThread()
@@ -46,8 +44,9 @@ static void aimBotThread()
 static void playerGlowThread()
 {
 	printf("Started Player Glow Thread\n");
-	while (lookingForProcs == false)
+	while (lookingForProcs == false&&v1==true)
 	{
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 		for (int i = 0; i < 100; i++)
 		{
 			uint64_t entityList = apexBase + OFFSET_ENTITYLIST;
@@ -55,46 +54,65 @@ static void playerGlowThread()
 			apex.Read<uint64_t>(entityList + ((uint64_t)i << 5), ent);
 
 
-				uint64_t localPlayer = 0;
-				apex.Read<uint64_t>(apexBase + OFFSET_LOCAL_ENT, localPlayer);
-				if (localPlayer == 0) continue;
+			uint64_t localPlayer = 0;
+			apex.Read<uint64_t>(apexBase + OFFSET_LOCAL_ENT, localPlayer);
+			if (localPlayer == 0) continue;
 
-				if (ent == localPlayer)
-				{
-					continue;
-				}
+			if (ent == localPlayer)
+			{
+				continue;
+			}
 
-				int entTeam;
-				apex.Read<int>(ent + OFFSET_TEAM, entTeam);
-				if (entTeam > 0 && entTeam < 60)
-				{
-					apex.Write<int>(ent + OFFSET_GLOW_ENABLE, 1);
-					apex.Write<int>(ent + OFFSET_GLOW_THROUGH_WALLS, 2);
-					apex.Write<GlowMode>(ent + GLOW_TYPE, { 101,102,46,96 });
-					apex.Write<float>(ent + GLOW_COLOR_R, 0.f);
-					apex.Write<float>(ent + GLOW_COLOR_G, 122.f);
-					apex.Write<float>(ent + GLOW_COLOR_B, 0.f);
-				}
+			int entTeam;
+			apex.Read<int>(ent + OFFSET_TEAM, entTeam);
+			if (entTeam > 0 && entTeam < 60)
+			{
+				apex.Write<int>(ent + OFFSET_GLOW_ENABLE, 1);
+				apex.Write<int>(ent + OFFSET_GLOW_THROUGH_WALLS, 2);
+				apex.Write<GlowMode>(ent + GLOW_TYPE, { 101,102,46,96 });
+				apex.Write<float>(ent + GLOW_COLOR_R, 0.f);
+				apex.Write<float>(ent + GLOW_COLOR_G, 122.f);
+				apex.Write<float>(ent + GLOW_COLOR_B, 0.f);
+			}
 		}
-
+		std::this_thread::sleep_for(std::chrono::milliseconds(600));
 	}
+
+	while (lookingForProcs == false&&v1 == false)
+	{
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+		for (int i = 0; i < 100; i++)
+		{
+			uint64_t entityList = apexBase + OFFSET_ENTITYLIST;
+			uint64_t entPtr = 0;
+			apex.Read<uint64_t>(entityList + ((uint64_t)i << 5), entPtr);
+
+			Entity ent = ptrToEntity(entPtr);
+			if (ent.isPlayer())
+			{
+				ent.enableGlow(0,122,0);
+			}
+		}
+	}
+	std::this_thread::sleep_for(std::chrono::milliseconds(600));
 }
 
 static void itemGlowThread()
 {
 	printf("Started Item Glow Thread\n");
 
-	while (lookingForProcs == false)
+	while (lookingForProcs == false&&v1 == true)
 	{
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 		for (int i = 0; i < 10000; i++)
 		{
 			uint64_t entityList = apexBase + OFFSET_ENTITYLIST;
 			uint64_t ent = 0;
 			apex.Read<uint64_t>(entityList + ((uint64_t)i << 5), ent);
 
-			int curentEntItemID;
+			int item.getItemID;
 			apex.Read<int>(ent + OFFSET_ITEM_ID, curentEntItemID);
-			if (curentEntItemID == LIGHT_ROUNDS || curentEntItemID == LIGHT_MAGAZINE_LV3 || curentEntItemID == HEAVY_MAGAZINE_LV3 || curentEntItemID == HEAVY_ROUNDS || curentEntItemID == BACKPACK_LV3 || curentEntItemID == HCOG_CLASSIC || curentEntItemID == HCOG_BRUISER || curentEntItemID == BARREL_STABILIZER_LV3)
+			if (curentEntItemID == LIGHT_ROUNDS || curentEntItemID == LIGHT_MAGAZINE_LV3 || curentEntItemID == HEAVY_MAGAZINE_LV3 || curentEntItemID == BODY_ARMOR_EVO3 || curentEntItemID == HEAVY_ROUNDS || curentEntItemID == BACKPACK_LV3 || curentEntItemID == HCOG_CLASSIC || curentEntItemID == HCOG_BRUISER || curentEntItemID == BARREL_STABILIZER_LV3)
 			{
 				apex.Write<int>(ent + OFFSET_GLOW_ENABLE, 1);
 				apex.Write<int>(ent + OFFSET_GLOW_THROUGH_WALLS, 2);
@@ -103,7 +121,7 @@ static void itemGlowThread()
 				apex.Write<float>(ent + GLOW_COLOR_G, 122.f);
 				apex.Write<float>(ent + GLOW_COLOR_B, 122.f);
 			}
-			else if (curentEntItemID == R99 || curentEntItemID == HEMLOCK || curentEntItemID == GOLD_KRABER || curentEntItemID == BODY_ARMOR_EVO3 || curentEntItemID == BODY_ARMOR_EVO4 || curentEntItemID == KNOCKDOWN_SHIELD_LV4 || curentEntItemID == R301)
+			else if (curentEntItemID == R99 || curentEntItemID == HEMLOCK || curentEntItemID == GOLD_KRABER || curentEntItemID == BODY_ARMOR_EVO4 || curentEntItemID == KNOCKDOWN_SHIELD_LV4 || curentEntItemID == R301 || curentEntItemID == BACKPACK_LV4)
 			{
 				apex.Write<int>(ent + OFFSET_GLOW_ENABLE, 1);
 				apex.Write<int>(ent + OFFSET_GLOW_THROUGH_WALLS, 2);
@@ -113,7 +131,36 @@ static void itemGlowThread()
 				apex.Write<float>(ent + GLOW_COLOR_B, 0.f);
 			}
 		}
+		std::this_thread::sleep_for(std::chrono::milliseconds(600));
+	}
 
+	while (lookingForProcs == false && v1 == false)
+	{
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+		for (int i = 0; i < 10000;i++)
+		{
+			uint64_t entityList = apexBase + OFFSET_ENTITYLIST;
+			uint64_t entPtr = 0;
+			apex.Read<uint64_t>(entityList + ((uint64_t)i << 5), entPtr);
+
+			Entity ent = ptrToEntity(entPtr);
+			if (ent.isItem)
+			{
+				Item item = ptrToItem(entPtr);
+				if (item.isGlowing() == false)
+				{
+					if (item.getItemID == LIGHT_ROUNDS || item.getItemID == LIGHT_MAGAZINE_LV3 || item.getItemID == HEAVY_MAGAZINE_LV3 || item.getItemID == BODY_ARMOR_EVO3 || item.getItemID == HEAVY_ROUNDS || item.getItemID == BACKPACK_LV3 || item.getItemID == HCOG_CLASSIC || item.getItemID == HCOG_BRUISER || item.getItemID == BARREL_STABILIZER_LV3)
+					{
+						item.enableGlow(0, 122, 122);
+					}
+					if (item.getItemID == R99 item.getItemID == R99 || item.getItemID == HEMLOCK || item.getItemID == GOLD_KRABER || item.getItemID == BODY_ARMOR_EVO4 || item.getItemID == KNOCKDOWN_SHIELD_LV4 || item.getItemID == R301 || item.getItemID == BACKPACK_LV4)
+					{
+						item.enableGlow(122, 0, 0);
+					}
+				}
+			}
+		}
+		std::this_thread::sleep_for(std::chrono::milliseconds(600));
 	}
 
 }
@@ -197,7 +244,7 @@ int main(int argc, char* argv[])
 	printf("Infinite While Loop Starting\n");
 	while (lookingForProcs == false)
 	{
-		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 		apex.check_proc();
 	}
 }
