@@ -110,7 +110,7 @@ static void itemGlowThread()
 			uint64_t ent = 0;
 			apex.Read<uint64_t>(entityList + ((uint64_t)i << 5), ent);
 
-			int item.getItemID;
+			int curentEntItemID;
 			apex.Read<int>(ent + OFFSET_ITEM_ID, curentEntItemID);
 			if (curentEntItemID == LIGHT_ROUNDS || curentEntItemID == LIGHT_MAGAZINE_LV3 || curentEntItemID == HEAVY_MAGAZINE_LV3 || curentEntItemID == BODY_ARMOR_EVO3 || curentEntItemID == HEAVY_ROUNDS || curentEntItemID == BACKPACK_LV3 || curentEntItemID == HCOG_CLASSIC || curentEntItemID == HCOG_BRUISER || curentEntItemID == BARREL_STABILIZER_LV3)
 			{
@@ -149,11 +149,11 @@ static void itemGlowThread()
 				Item item = ptrToItem(entPtr);
 				if (item.isGlowing() == false)
 				{
-					if (item.getItemID == LIGHT_ROUNDS || item.getItemID == LIGHT_MAGAZINE_LV3 || item.getItemID == HEAVY_MAGAZINE_LV3 || item.getItemID == BODY_ARMOR_EVO3 || item.getItemID == HEAVY_ROUNDS || item.getItemID == BACKPACK_LV3 || item.getItemID == HCOG_CLASSIC || item.getItemID == HCOG_BRUISER || item.getItemID == BARREL_STABILIZER_LV3)
+					if (item.getItemID() == LIGHT_ROUNDS || item.getItemID() == LIGHT_MAGAZINE_LV3 || item.getItemID() == HEAVY_MAGAZINE_LV3 || item.getItemID() == BODY_ARMOR_EVO3 || item.getItemID() == HEAVY_ROUNDS || item.getItemID() == BACKPACK_LV3 || item.getItemID() == HCOG_CLASSIC || item.getItemID() == HCOG_BRUISER || item.getItemID() == BARREL_STABILIZER_LV3)
 					{
 						item.enableGlow(0, 122, 122);
 					}
-					if (item.getItemID == R99 item.getItemID == R99 || item.getItemID == HEMLOCK || item.getItemID == GOLD_KRABER || item.getItemID == BODY_ARMOR_EVO4 || item.getItemID == KNOCKDOWN_SHIELD_LV4 || item.getItemID == R301 || item.getItemID == BACKPACK_LV4)
+					if (item.getItemID() == R99 item.getItemID() == R99 || item.getItemID() == HEMLOCK || item.getItemID() == GOLD_KRABER || item.getItemID() == BODY_ARMOR_EVO4 || item.getItemID() == KNOCKDOWN_SHIELD_LV4 || item.getItemID() == R301 || item.getItemID() == BACKPACK_LV4)
 					{
 						item.enableGlow(122, 0, 0);
 					}
