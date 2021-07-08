@@ -9,7 +9,7 @@ bool Entity::isPlayer()
 	uint64_t entName;
 	apex.Read<uint64_t>(ptr + OFFSET_NAME, entName);
 
-	if (entName) == 125780153691248 {
+	if (entName == 125780153691248) {
 		return true;
 	}
 	else
@@ -42,10 +42,6 @@ void Entity::enableGlow(float R, float G, float B)
 	apex.Write<float>(ptr + GLOW_COLOR_B, B);
 }
 
-bool Entity::isGlowing()
-{
-	return false;
-}
 
 bool Entity::isGlowing()
 {
@@ -57,7 +53,8 @@ bool Entity::isGlowing()
 	}
 	else
 	{
-
+		return false;
+	}
 }
 
 int Item::getItemID()

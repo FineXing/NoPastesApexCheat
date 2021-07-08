@@ -20,7 +20,7 @@ Memory client;
 uint64_t apexBase; // apex base addr
 uint64_t clientBase; // client base addr
 
-bool v1 == false;
+bool v1 = false;
 
 bool glowItems = true;
 
@@ -144,7 +144,7 @@ static void itemGlowThread()
 			apex.Read<uint64_t>(entityList + ((uint64_t)i << 5), entPtr);
 
 			Entity ent = ptrToEntity(entPtr);
-			if (ent.isItem)
+			if (ent.isItem())
 			{
 				Item item = ptrToItem(entPtr);
 				if (item.isGlowing() == false)
@@ -153,7 +153,7 @@ static void itemGlowThread()
 					{
 						item.enableGlow(0, 122, 122);
 					}
-					if (item.getItemID() == R99 item.getItemID() == R99 || item.getItemID() == HEMLOCK || item.getItemID() == GOLD_KRABER || item.getItemID() == BODY_ARMOR_EVO4 || item.getItemID() == KNOCKDOWN_SHIELD_LV4 || item.getItemID() == R301 || item.getItemID() == BACKPACK_LV4)
+					if (item.getItemID() == R99|| item.getItemID() == R99 || item.getItemID() == HEMLOCK || item.getItemID() == GOLD_KRABER || item.getItemID() == BODY_ARMOR_EVO4 || item.getItemID() == KNOCKDOWN_SHIELD_LV4 || item.getItemID() == R301 || item.getItemID() == BACKPACK_LV4)
 					{
 						item.enableGlow(122, 0, 0);
 					}
