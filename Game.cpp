@@ -36,7 +36,7 @@ bool Entity::isItem()
 bool Entity::isDummy()
 {
 	int entTeam;
-	apex.Read<int>(ptr + OFFSET_TEAM);
+	apex.Read<int>(ptr + OFFSET_TEAM, entTeam);
 	if (entTeam == 97)
 	{
 		return true;
