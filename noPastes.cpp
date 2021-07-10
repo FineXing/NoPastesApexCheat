@@ -57,8 +57,7 @@ static void aimBotThreadFunc()
 				diference.x = entPos.x - localPlayerPos.x;
 				diference.y = entPos.y - localPlayerPos.y;
 				diference.z = entPos.z - localPlayerPos.z;
-
-				float c = sqrt((diference.x * diference.x) + (diference.z * diference.z));
+				float c = std::sqrt((diference.x * diference.x) + (diference.z * diference.z));
 				float yaw = (atan2(diference.z, diference.x) * 180 / ((float)3.14159265358979323846)) - 90.0f;
 				float pitch = (atan2(diference.y, c) * 180 / ((float)3.14159265358979323846));
 
