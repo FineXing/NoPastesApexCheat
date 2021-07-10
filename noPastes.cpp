@@ -59,8 +59,8 @@ static void aimBotThreadFunc()
 				diference.z = entPos.z - localPlayerPos.z;
 
 				float c = sqrt((diference.x * diference.x) + (diference.z * diference.z));
-				float yaw = (atan2(diference.z, diference.x) * 180 / ((float)M_PI)) - 90.0f;
-				float pitch = (atan2(diference.y, c) * 180 / ((float)M_PI));
+				float yaw = (atan2(diference.z, diference.x) * 180 / ((float)3.14159265358979323846)) - 90.0f;
+				float pitch = (atan2(diference.y, c) * 180 / ((float)3.14159265358979323846));
 
 				Vector vAngles = { yaw, pitch,0.f };
 				apex.Write<Vector>(localPlayer.ptr + OFFSET_VIEWANGLES, vAngles);
