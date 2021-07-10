@@ -10,8 +10,8 @@ void AimAssist2(std::vector<UINT> players) {
 
 	float lowestFov = FLT_MAX;
 	Vec3 cameraPos, viewAngles;
-	apex.Read<Vec3?>(OFFSET_LOCAL_ENT + OFFSET_CAMERAPOS, cameraPos);
-	apex.Read<Vec3?>(OFFSET_LOCAL_ENT + OFFSET_VIEWANGLES, viewAngles);
+	apex.Read<Vec3>(OFFSET_LOCAL_ENT + OFFSET_CAMERAPOS, cameraPos);
+	apex.Read<Vec3>(OFFSET_LOCAL_ENT + OFFSET_VIEWANGLES, viewAngles);
 
 	uint64_t target = NULL;
 	Vec3 targetCenter;

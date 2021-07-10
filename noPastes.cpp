@@ -13,7 +13,6 @@
 #include "ids.h"
 #include "Game.h"
 
-
 Memory apex;
 Memory client;
 
@@ -23,21 +22,50 @@ uint64_t clientBase; // client base addr
 bool v1 = false;
 
 bool glowItems = true;
+float maxDistance = 200.0f * 40.0f;
 
 bool lookingForProcs = true; //read write - controls when cheat starts
 
 
-
-
-static void aimBotThread()
+static void aimBotThreadFunc()
 {
 	while (lookingForProcs ==false)
 	{
-		uint64_t localPlayer = 0;
-		apex.Read<uint64_t>(apexBase + OFFSET_LOCAL_ENT, localPlayer);
-		if (localPlayer = 0)continue;
+		uint64_t localPlayerPtr = 0;
+		apex.Read<uint64_t>(apexBase + OFFSET_LOCAL_ENT, localPlayerPtr);
+		if (localPlayerPtr = 0)continue;
 
+		uint64_t entityList = apexBase + OFFSET_ENTITYLIST;
+		for (int i = 0; i <= 10000; i++)
+		{
+			uint64_t entPtr = 0;
+			apex.Read<uint64_t>(entityList + ((uint64_t)i << 5), entPtr);
 
+			Entity ent ptrToEntity(entPtr);
+			if (ent.isDummy())
+			{
+				continue;
+			}
+
+			Vector entPos = ent.getPosition();
+			Player localPlayer = ptrToPlayer(localPlayerPtr);
+			Vector localPlayerPos = localPlayer.getPosition();
+			float distance = localPlayer.getPosition().DistTo(entPos);
+			if (distance < maxDistance)
+			{
+				Vector diference;
+				diference.x = entPos.x - localPlayerPos.x;
+				diference.y = entPos.y - localPlayerPos.y;
+				diference.z = entPos.z - localPlayerPos.z;
+
+				float c = sqrt((diference.x * diference.x) + (diference.z * diference.z));
+				float yaw = (atan2(diference.z, diference.x) * 180 / M_PI_F) - 90.0f);
+				float pitch = (atan2(diference.y, c) * 180 M_PI_F);
+
+				Vector vAngles = { yaw, pitch,0.f };
+				apex.Write<Vector>(localPlayer.ptr + OFFSET_VIEWANGLES, vAngles);
+			}
+		}
 	}
 }
 
@@ -239,6 +267,13 @@ int main(int argc, char* argv[])
 	glowPlayerThread.~thread();
 	glowPlayerThread = std::thread(playerGlowThread);
 	glowPlayerThread.detach();
+
+
+	printf("Starting AimBot Thread\n");
+	std::thread aimBotThread;
+	aimBotThread.~thread();
+	aimBotThread = std::thread(aimBotThreadFunc);
+	aimBotThread.detach();
 
 	std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	printf("Infinite While Loop Starting\n");
