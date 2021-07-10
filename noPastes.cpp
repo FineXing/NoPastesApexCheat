@@ -41,7 +41,7 @@ static void aimBotThreadFunc()
 			uint64_t entPtr = 0;
 			apex.Read<uint64_t>(entityList + ((uint64_t)i << 5), entPtr);
 
-			Entity ent ptrToEntity(entPtr);
+			Entity ent = ptrToEntity(entPtr);
 			if (ent.isDummy())
 			{
 				continue;
@@ -59,8 +59,8 @@ static void aimBotThreadFunc()
 				diference.z = entPos.z - localPlayerPos.z;
 
 				float c = sqrt((diference.x * diference.x) + (diference.z * diference.z));
-				float yaw = (atan2(diference.z, diference.x) * 180 / M_PI_F) - 90.0f);
-				float pitch = (atan2(diference.y, c) * 180 M_PI_F);
+				float yaw = (atan2(diference.z, diference.x) * 180 / M_PI_F) - 90.0f;
+				float pitch = (atan2(diference.y, c) * 180 / M_PI_F);
 
 				Vector vAngles = { yaw, pitch,0.f };
 				apex.Write<Vector>(localPlayer.ptr + OFFSET_VIEWANGLES, vAngles);
