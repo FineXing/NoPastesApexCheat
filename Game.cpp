@@ -74,15 +74,13 @@ bool Entity::isGlowing()
 
 float Entity::getDistance()
 {
-	std::vector<float> pos = getPosition();
-	
-	Vector localPlayerPos = 
+	return -1.f;
 }
 
 Vector Entity::getPosition()
 {
 	Vector entPos;
-	apex.Read<Vector>(ent + OFFSET_ORIGIN, entPos);
+	apex.Read<Vector>(ptr + OFFSET_ORIGIN, entPos);
 	return entPos;
 }
 
@@ -121,7 +119,7 @@ bool Item::isGlowing()
 Vector Item::getPosition()
 {
 	Vector entPos;
-	apex.Read<Vector>(ent + OFFSET_ORIGIN, entPos);
+	apex.Read<Vector>(ptr + OFFSET_ORIGIN, entPos);
 	return entPos;
 }
 
@@ -174,7 +172,7 @@ bool Player::isGlowing()
 Vector Player::getPosition()
 {
 	Vector entPos;
-	apex.Read<Vector>(ent + OFFSET_ORIGIN, entPos);
+	apex.Read<Vector>(ptr + OFFSET_ORIGIN, entPos);
 	return entPos;
 }
 
