@@ -22,7 +22,7 @@
 #define OFFSET_BONES				0xF38 //m_bConstrainBetweenEndpoints
 #define OFFSET_AIMPUNCH				0x2430 //m_currentFrameLocalPlayer.m_vecPunchWeapon_Angle
 #define OFFSET_CAMERAPOS			0x1ED0
-#define OFFSET_VIEWANGLES			0x2518 - 0x14 //m_ammoPoolCapacity - 0x14
+#define OFFSET_VIEWANGLES			0x2518 // - 0x14 //m_ammoPoolCapacity - 0x14
 #define OFFSET_BREATH_ANGLES		OFFSET_VIEWANGLES - 0x10
 #define OFFSET_OBSERVER_MODE		0x334C //m_iObserverMode
 #define OFFSET_OBSERVING_TARGET		0x3350 //m_hObserverTarget
