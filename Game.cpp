@@ -176,3 +176,9 @@ Vector Player::getPosition()
 	return entPos;
 }
 
+void Player::setViewAngles(vec2 angles)
+{
+	angles.Normalize();
+	apex.Write<vec2>(ptr+OFFSET_VIEWANGLES,angles);
+}
+

@@ -22,6 +22,7 @@ public:
 	bool isGlowing();
 	float getDistance();
 	Vector getPosition();
+	void setViewAngles(vec2 angles);
 };
 
 class Item

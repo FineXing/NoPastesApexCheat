@@ -22,7 +22,7 @@
 #define OFFSET_BONES				0xF38 //m_bConstrainBetweenEndpoints
 #define OFFSET_AIMPUNCH				0x2430 //m_currentFrameLocalPlayer.m_vecPunchWeapon_Angle
 #define OFFSET_CAMERAPOS			0x1ED0
-#define OFFSET_VIEWANGLES			0x2518 // - 0x14 //m_ammoPoolCapacity - 0x14
+#define OFFSET_VIEWANGLES			0x2518 - 0x14 //m_ammoPoolCapacity - 0x14
 #define OFFSET_BREATH_ANGLES		OFFSET_VIEWANGLES - 0x10
 #define OFFSET_OBSERVER_MODE		0x334C //m_iObserverMode
 #define OFFSET_OBSERVING_TARGET		0x3350 //m_hObserverTarget
@@ -42,7 +42,7 @@
 #define OFFSET_GLOW_ENABLE          0x3c8 //7 = enabled, 2 = disabled
 #define OFFSET_GLOW_THROUGH_WALLS   0x3d0 //2 = enabled, 5 = disabled
 #define GLOW_TYPE 0x2C4 //0x2C4 //OK Script_Highlight_GetState + 4 / m_highlightFunctionBits  + 4?
-#define GLOW_COLOR_R 0x1D0 //OK Script_CopyHighlightState mov tcx nº7  / m_highlightParams + 24 (0x18)
-#define GLOW_COLOR_G 0x1D4 //OK Script_CopyHighlightState mov tcx nº7  / m_highlightParams + 24 (0x18)
-#define GLOW_COLOR_B 0x1D8 //OK Script_CopyHighlightState mov tcx nº7  / m_highlightParams + 24 (0x18)
+#define GLOW_COLOR_R 0x1D0 //OK Script_CopyHighlightState mov tcx nï¿½7  / m_highlightParams + 24 (0x18)
+#define GLOW_COLOR_G 0x1D4 //OK Script_CopyHighlightState mov tcx nï¿½7  / m_highlightParams + 24 (0x18)
+#define GLOW_COLOR_B 0x1D8 //OK Script_CopyHighlightState mov tcx nï¿½7  / m_highlightParams + 24 (0x18)
 #define GLOW_DISTANCE 0x3B4 //OK Script_Highlight_SetFarFadeDist / m_highlightServerFadeEndTimes + 52(0x34)
