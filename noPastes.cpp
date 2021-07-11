@@ -12,7 +12,6 @@
 #include "ids.h"
 #include "Game.h"
 #include "defs.h"
-#include "vec.h"
 
 Memory apex;
 Memory client;

@@ -1,5 +1,5 @@
 #include <stdint.h>
-#include "vector.h"
+#include "vec.h"
 
 class Entity
 {
@@ -39,6 +39,8 @@ struct GlowMode
 {
 	int8_t GeneralGlowMode, BorderGlowMode, BorderSize, TransparentLevel;
 };
+
+
 
 Item ptrToItem(uintptr_t ptr);
 Entity ptrToEntity(uintptr_t ptr);
