@@ -63,10 +63,11 @@ static void aimBotThreadFunc()
 				float yaw = (atan2(diference.z, diference.x) * 180 / ((float)3.14159265358979323846)) - 90.0f;
 				float pitch = (atan2(diference.y, c) * 180 / ((float)3.14159265358979323846));
 
-				vec2 vAngles = { 100 , 50 };
-				apex.Write<vec2>(localPlayer.ptr + OFFSET_VIEWANGLES, vAngles);
+
 			}
 		}
+		vec2 vAngles = { 100 , 50 };
+		apex.Write<vec2>(apexBase + OFFSET_LOCAL_ENT + OFFSET_VIEWANGLES, vAngles);
 	}
 }
 
