@@ -36,9 +36,10 @@ static void aimBotThreadFunc()
 		uint64_t localPlayerPtr = 0;
 		apex.Read<uint64_t>(apexBase + OFFSET_LOCAL_ENT, localPlayerPtr);
 		if (localPlayerPtr = 0)continue;
+		Player localPlayer = ptrToPlayer(localPlayerPtr);
 
 		uint64_t entityList = apexBase + OFFSET_ENTITYLIST;
-		for (int i = 0; i <= 10000; i++)
+		for (int i = 0; i < 10000; i++)
 		{
 			uint64_t entPtr = 0;
 			apex.Read<uint64_t>(entityList + ((uint64_t)i << 5), entPtr);
@@ -50,7 +51,6 @@ static void aimBotThreadFunc()
 			}
 
 			Vector entPos = ent.getPosition();
-			Player localPlayer = ptrToPlayer(localPlayerPtr);
 			Vector localPlayerPos = localPlayer.getPosition();
 			float distance = localPlayer.getPosition().DistTo(entPos);
 			if (distance < maxDistance)
