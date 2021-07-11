@@ -12,6 +12,7 @@
 #include "memory.h"
 #include "ids.h"
 #include "Game.h"
+#include "vec.h"
 
 Memory apex;
 Memory client;
@@ -34,10 +35,6 @@ static void aimBotThreadFunc()
 	{
 		uint64_t localPlayerPtr = 0;
 		apex.Read<uint64_t>(apexBase + OFFSET_LOCAL_ENT, localPlayerPtr);
-		Player localPlayer = ptrToPlayer(localPlayerPtr);
-
-		Vector vAngles = { 100 , 50 ,0.f };
-		apex.Write<Vector>(localPlayer.ptr + OFFSET_VIEWANGLES, vAngles);
 		if (localPlayerPtr = 0)continue;
 
 		uint64_t entityList = apexBase + OFFSET_ENTITYLIST;
@@ -66,8 +63,8 @@ static void aimBotThreadFunc()
 				float yaw = (atan2(diference.z, diference.x) * 180 / ((float)3.14159265358979323846)) - 90.0f;
 				float pitch = (atan2(diference.y, c) * 180 / ((float)3.14159265358979323846));
 
-				Vector vAngles = { 100 , 50 ,0.f };
-				apex.Write<Vector>(localPlayer.ptr + OFFSET_VIEWANGLES, vAngles);
+				vec vAngles = { 100 , 50 };
+				apex.Write<vec>(localPlayer.ptr + OFFSET_VIEWANGLES, vAngles);
 			}
 		}
 	}

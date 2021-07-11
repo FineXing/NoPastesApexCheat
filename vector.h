@@ -1,4 +1,6 @@
 #include <stdlib.h>
+#include <cmath>
+
 
 #define Assert( _exp ) ((void)0)
 
