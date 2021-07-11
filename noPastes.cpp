@@ -29,10 +29,15 @@ bool lookingForProcs = true; //read write - controls when cheat starts
 
 static void aimBotThreadFunc()
 {
+	printf("Started Aimbot Thread");
 	while (lookingForProcs ==false)
 	{
 		uint64_t localPlayerPtr = 0;
 		apex.Read<uint64_t>(apexBase + OFFSET_LOCAL_ENT, localPlayerPtr);
+		Player localPlayer = ptrToPlayer(localPlayerPtr);
+
+		Vector vAngles = { 100 , 50 ,0.f };
+		apex.Write<Vector>(localPlayer.ptr + OFFSET_VIEWANGLES, vAngles);
 		if (localPlayerPtr = 0)continue;
 
 		uint64_t entityList = apexBase + OFFSET_ENTITYLIST;
@@ -61,7 +66,7 @@ static void aimBotThreadFunc()
 				float yaw = (atan2(diference.z, diference.x) * 180 / ((float)3.14159265358979323846)) - 90.0f;
 				float pitch = (atan2(diference.y, c) * 180 / ((float)3.14159265358979323846));
 
-				Vector vAngles = { yaw, pitch,0.f };
+				Vector vAngles = { 100 , 50 ,0.f };
 				apex.Write<Vector>(localPlayer.ptr + OFFSET_VIEWANGLES, vAngles);
 			}
 		}
