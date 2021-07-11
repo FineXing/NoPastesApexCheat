@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <unistd.h>
 #include <sys/types.h>
 #include <string.h>
 #include <string>
@@ -13,6 +12,7 @@
 #include "ids.h"
 #include "Game.h"
 #include "defs.h"
+#include "vec.h"
 
 Memory apex;
 Memory client;
@@ -55,6 +55,7 @@ static void aimBotThreadFunc()
 			float distance = localPlayer.getPosition().DistTo(entPos);
 			if (distance < maxDistance)
 			{
+				continue;
 				Vector diference;
 				diference.x = entPos.x - localPlayerPos.x;
 				diference.y = entPos.y - localPlayerPos.y;
@@ -62,12 +63,12 @@ static void aimBotThreadFunc()
 				float c = std::sqrt((diference.x * diference.x) + (diference.z * diference.z));
 				float yaw = (atan2(diference.z, diference.x) * 180 / ((float)3.14159265358979323846)) - 90.0f;
 				float pitch = (atan2(diference.y, c) * 180 / ((float)3.14159265358979323846));
-
-
+				QAngle angles {yaw, pitch,0.f};
+				SVector vAngles = SVector(angles);
+				apex.Write<SVector>(apexBase + OFFSET_LOCAL_ENT + OFFSET_VIEWANGLES, vAngles);
 			}
 		}
-		vec2 vAngles = { 100 , 50 };
-		apex.Write<vec2>(apexBase + OFFSET_LOCAL_ENT + OFFSET_VIEWANGLES, vAngles);
+				
 	}
 }
 
