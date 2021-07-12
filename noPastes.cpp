@@ -34,11 +34,15 @@ static void aimBotThreadFunc()
 	{
 		uint64_t localPlayerPtr = 0;
 		apex.Read<uint64_t>(apexBase + OFFSET_LOCAL_ENT, localPlayerPtr);
-		if (localPlayerPtr = 0)continue;
-		Player localPlayer = ptrToPlayer(localPlayerPtr);
-		vec2 vAngles = localPlayer.getViewAngles();
-		printf("angles: ", vAngles);
 		uint64_t entityList = apexBase + OFFSET_ENTITYLIST;
+		if (localPlayerPtr = 0)
+		{
+			Player localPlayer = ptrToPlayer(localPlayerPtr);
+			Vector2D vAngles = localPlayer.getViewAngles();
+			printf("angles.x: ", vAngles.x);
+			printf("angles.y: ", vAngles.y);
+
+		}
 		for (int i = 0; i < 10000; i++)
 		{
 			uint64_t entPtr = 0;
@@ -47,21 +51,21 @@ static void aimBotThreadFunc()
 			Entity ent = ptrToEntity(entPtr);
 			if (ent.isDummy())
 			{
-				
+
 			}
 
 			Vector entPos = ent.getPosition();
-			Vector localPlayerPos = localPlayer.getPosition();
-			float distance = localPlayer.getPosition().DistTo(entPos);
+			//Vector localPlayerPos = localPlayer.getPosition();
+			//float distance = localPlayer.getPosition().DistTo(entPos);
 			if (true)
 			{		
 				Vector diference;
-				diference.x = entPos.x - localPlayerPos.x;
-				diference.y = entPos.y - localPlayerPos.y;
-				diference.z = entPos.z - localPlayerPos.z;
-				float c = std::sqrt((diference.x * diference.x) + (diference.z * diference.z));
-				float yaw = (atan2(diference.z, diference.x) * 180 / ((float)3.14159265358979323846)) - 90.0f;
-				float pitch = (atan2(diference.y, c) * 180 / ((float)3.14159265358979323846));
+				//diference.x = entPos.x - localPlayerPos.x;
+				//diference.y = entPos.y - localPlayerPos.y;
+				//diference.z = entPos.z - localPlayerPos.z;
+				//float c = std::sqrt((diference.x * diference.x) + (diference.z * diference.z));
+				//float yaw = (atan2(diference.z, diference.x) * 180 / ((float)3.14159265358979323846)) - 90.0f;
+				//float pitch = (atan2(diference.y, c) * 180 / ((float)3.14159265358979323846));
 				//vec2 vAngles = localPlayer.getViewAngles();
 				//vAngles.x = vAngles.x + 1.0f;
 				//.y = vAngles.x + 1.0f;
