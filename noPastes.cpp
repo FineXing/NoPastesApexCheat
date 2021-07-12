@@ -36,7 +36,8 @@ static void aimBotThreadFunc()
 		apex.Read<uint64_t>(apexBase + OFFSET_LOCAL_ENT, localPlayerPtr);
 		if (localPlayerPtr = 0)continue;
 		Player localPlayer = ptrToPlayer(localPlayerPtr);
-
+		vec2 vAngles = localPlayer.getViewAngles();
+		printf("angles: ", vAngles);
 		uint64_t entityList = apexBase + OFFSET_ENTITYLIST;
 		for (int i = 0; i < 10000; i++)
 		{
@@ -46,7 +47,7 @@ static void aimBotThreadFunc()
 			Entity ent = ptrToEntity(entPtr);
 			if (ent.isDummy())
 			{
-				continue;
+				
 			}
 
 			Vector entPos = ent.getPosition();
@@ -61,10 +62,10 @@ static void aimBotThreadFunc()
 				float c = std::sqrt((diference.x * diference.x) + (diference.z * diference.z));
 				float yaw = (atan2(diference.z, diference.x) * 180 / ((float)3.14159265358979323846)) - 90.0f;
 				float pitch = (atan2(diference.y, c) * 180 / ((float)3.14159265358979323846));
-				vec2 vAngles = localPlayer.getViewAngles();
-				vAngles.x = vAngles.x + 1.0f;
-				vAngles.y = vAngles.x + 1.0f;
-				localPlayer.setViewAngles(vAngles);
+				//vec2 vAngles = localPlayer.getViewAngles();
+				//vAngles.x = vAngles.x + 1.0f;
+				//.y = vAngles.x + 1.0f;
+				//localPlayer.setViewAngles(vAngles);
 			}
 		}
 				
