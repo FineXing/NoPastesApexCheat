@@ -12,7 +12,6 @@
 #include "memory.h"
 #include "ids.h"
 #include "Game.h"
-#include "defs.h"
 
 Memory apex;
 Memory client;
@@ -53,9 +52,8 @@ static void aimBotThreadFunc()
 			Vector entPos = ent.getPosition();
 			Vector localPlayerPos = localPlayer.getPosition();
 			float distance = localPlayer.getPosition().DistTo(entPos);
-			if (distance < maxDistance)
-			{
-				
+			if (true)
+			{		
 				Vector diference;
 				diference.x = entPos.x - localPlayerPos.x;
 				diference.y = entPos.y - localPlayerPos.y;
@@ -63,7 +61,9 @@ static void aimBotThreadFunc()
 				float c = std::sqrt((diference.x * diference.x) + (diference.z * diference.z));
 				float yaw = (atan2(diference.z, diference.x) * 180 / ((float)3.14159265358979323846)) - 90.0f;
 				float pitch = (atan2(diference.y, c) * 180 / ((float)3.14159265358979323846));
-				vec2 vAngles = {yaw, pitch};
+				vec2 vAngles = localPlayer.getViewAngles();
+				vAngles.x = vAngles.x + 1.0f;
+				vAngles.y = vAngles.x + 1.0f;
 				localPlayer.setViewAngles(vAngles);
 			}
 		}
