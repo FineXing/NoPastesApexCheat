@@ -39,8 +39,8 @@ static void aimBotThreadFunc()
 		{
 			Player localPlayer = ptrToPlayer(localPlayerPtr);
 			Vector2D vAngles = localPlayer.getViewAngles();
-			printf("angles.x: ", vAngles.x);
-			printf("angles.y: ", vAngles.y);
+			printf("angles.x: %.1f", vAngles.x);
+			printf("angles.y: %.1f", vAngles.y);
 
 		}
 		for (int i = 0; i < 10000; i++)
