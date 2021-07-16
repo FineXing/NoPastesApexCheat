@@ -61,19 +61,58 @@ static void aimBotThreadFunc()
 			Vector entPos = ent.getPosition();
 			Vector localPlayerPos = localPlayer.getPosition();
 			float distance = localPlayer.getPosition().DistTo(entPos);
+
+			Vector diference;
+			diference.x = entPos.x - localPlayerPos.x;
+			diference.y = entPos.y - localPlayerPos.y;
+			diference.z = entPos.z - localPlayerPos.z;
+			float c = std::sqrt((diference.x * diference.x) + (diference.z * diference.z));
+			float yaw = (atan2(diference.z, diference.x) * 180 / ((float)3.14159265358979323846)) - 90.0f;
+			float pitch = (atan2(diference.y, c) * 180 / ((float)3.14159265358979323846));
+			vec2 vAngles = localPlayer.getViewAngles();
+			vAngles.x = yaw;
+			vAngles.y = pitch;
+
 			if (true)
 			{		
-				Vector diference;
-				diference.x = entPos.x - localPlayerPos.x;
-				diference.y = entPos.y - localPlayerPos.y;
-				diference.z = entPos.z - localPlayerPos.z;
-				float c = std::sqrt((diference.x * diference.x) + (diference.z * diference.z));
-				float yaw = (atan2(diference.z, diference.x) * 180 / ((float)3.14159265358979323846)) - 90.0f;
-				float pitch = (atan2(diference.y, c) * 180 / ((float)3.14159265358979323846));
-				vec2 vAngles = localPlayer.getViewAngles();
-				vAngles.x = vAngles.x + 1.0f;
-				vAngles.y = vAngles.x + 1.0f;
-				localPlayer.setViewAngles(vAngles);
+				uint64_t Input{ 0x1C74380 };
+
+				uint64_t m_pCommands;
+				apex.Read<uint64_t>(Input + 0xF8, m_pCommands);
+
+				int first_command_number;
+				apex.Read<int>(m_pCommands,first_command_number);
+				
+				int temp;
+				apex.Read<int>(m_pCommands,temp);
+				while (first_command_number == temp); //verifies that current usercmd is latest
+
+
+				int next_cmd_number;
+				apex.Read<int>((m_pCommands + 0x218) + 1, next_cmd_number ); //Grab next current usercmd (0x218 is size of UserCmd)
+ 
+				while (true)
+				{
+					uint64_t current_command{ m_pCommands + 0x218 * (next_cmd_number % 750) };
+
+					bool doingShit = true;
+
+					while (doingShit)
+					{
+						int curCommandTemp;
+						apex.Read<int>(current_command,curCommandTemp);
+						if (next_cmd_number == curCommandTemp)
+						{
+							doingShit = false;
+						}
+					}
+
+					unsigned int old_command{ m_pCommands + 0x218 * ((next_cmd_number - 1) % 750) };
+ 
+					apex.Write(old_command + 0x38, 1); //Write to buttons
+					apex.Write(old_command + 0xC, vAngles); //Write to viewangles
+					apex.Read<int>((current_command) + 1, next_cmd_number);
+				}
 			}
 		}
 				

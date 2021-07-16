@@ -5,6 +5,7 @@
 static float lastLowestFov = BONE_GRAVITY_FOV;
 
 void AimAssist2(std::vector<UINT> players) {
+
 	int localTeam;
 	apex.Read<int>(OFFSET_LOCAL_ENT + OFFSET_TEAM, localTeam);
 
@@ -76,4 +77,23 @@ void AimAssist2(std::vector<UINT> players) {
 		d.Write(ents[localId].pEntity + OFFSET_VIEWANGLES, newViewAngles);
 	}
 	lastLowestFov = lowestFov;
+}
+
+
+unsigned int Input{ 0x1C74380 };
+auto m_pCommands{ apex.read<unsigned int>(Input + 0xF8, true) };
+auto first_command_number{ apex.read<int>(m_pCommands) };
+while (first_command_number == apex.read<int>(m_pCommands)); //verifies that current usercmd is latest
+auto next_cmd_number{ apex.read<int>(m_pCommands + 0x218) + 1 }; //Grab next current usercmd (0x218 is size of UserCmd)
+ 
+while (true) {
+	unsigned int current_command{ m_pCommands + 0x218 * (next_cmd_number % 750) };
+	while (next_cmd_number != apex.read<int>(current_command)); //Wait for usercmd to be accessed
+	unsigned int old_command{ m_pCommands + 0x218 * ((next_cmd_number - 1) % 750) };
+ 
+	Memory::Structs::Vector2 view_angles{ 0.0f, 0.0f };
+	apex.write(old_command + 0x38, 1); //Write to buttons
+	apex.write(old_command + 0xC, view_angles); //Write to viewangles
+ 
+	next_cmd_number = apex.read<int>(current_command) + 1;
 }
