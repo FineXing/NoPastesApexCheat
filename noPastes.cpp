@@ -32,6 +32,8 @@ static void aimBotThreadFunc()
 	printf("Started Aimbot Thread");
 	while (lookingForProcs ==false)
 	{
+		//localEnt, viewangles
+
 		uint64_t localPlayerPtr = 0;
 		apex.Read<uint64_t>(apexBase + OFFSET_LOCAL_ENT, localPlayerPtr);
 		uint64_t entityList = apexBase + OFFSET_ENTITYLIST;
