@@ -2,33 +2,32 @@
 // https://github.com/CasualX/apexbot , https://www.unknowncheats.me/forum/apex-legends/319804-apex-legends-reversal-structs-offsets.html
 #define OFFSET_ENTITYLIST			0x1911448
 #define OFFSET_LOCAL_ENT			0x1cc0ce8 //LocalPlayer
-#define OFFSET_NAME_LIST            0x81af640
-#define OFFSET_THIRDPERSON          0x018d42d0 + 0x6c //thirdperson_override + 0x6c
+#define OFFSET_NAME_LIST            0x8382450
+#define OFFSET_THIRDPERSON          0x018f7970 + 0x6c //thirdperson_override + 0x6c
 
-#define OFFSET_TEAM					0x0448 //m_iTeamNum
-#define OFFSET_HEALTH				0x0438 //m_iHealth
-#define OFFSET_SHIELD				0x0170 //m_shieldHealth
+#define OFFSET_TEAM					0x448 //m_iTeamNum
+#define OFFSET_HEALTH				0x438 //m_iHealth
+#define OFFSET_SHIELD				0x170 //m_shieldHealth
 #define OFFSET_NAME					0x589 //m_iName
 #define OFFSET_SIGN_NAME			0x580 //m_iSignifierName
 #define OFFSET_ABS_VELOCITY         0x140 //m_vecAbsVelocity
 #define OFFSET_VISIBLE_TIME         0x1ACC
 #define OFFSET_ZOOMING      		0x1be1 //m_bZooming
-#define OFFSET_ITEM_ID	0x1698
 
-#define OFFSET_LIFE_STATE			0x0798  //m_lifeState, >0 = dead
-#define OFFSET_BLEED_OUT_STATE		0x2688 //m_bleedoutState, >0 = knocked
+#define OFFSET_LIFE_STATE			0x798  //m_lifeState, >0 = dead
+#define OFFSET_BLEED_OUT_STATE		0x26c8 //m_bleedoutState, >0 = knocked
 
 #define OFFSET_ORIGIN				0x14c //m_vecAbsOrigin
 #define OFFSET_BONES				0xF38 //m_bConstrainBetweenEndpoints
 #define OFFSET_AIMPUNCH				0x2430 //m_currentFrameLocalPlayer.m_vecPunchWeapon_Angle
 #define OFFSET_CAMERAPOS			0x1ED0
-#define OFFSET_VIEWANGLES			0x2518   //m_ammoPoolCapacity - 0x14
+#define OFFSET_VIEWANGLES			0x252c - 0x14 //m_ammoPoolCapacity - 0x14
 #define OFFSET_BREATH_ANGLES		OFFSET_VIEWANGLES - 0x10
 #define OFFSET_OBSERVER_MODE		0x334C //m_iObserverMode
 #define OFFSET_OBSERVING_TARGET		0x3350 //m_hObserverTarget
 
-#define OFFSET_MATRIX				0x1b3bd0 
-#define OFFSET_RENDER				0x41e3588 
+#define OFFSET_MATRIX				0x1b3bd0
+#define OFFSET_RENDER				0x41e3588
 
 #define OFFSET_WEAPON				0x1a6c //m_latestPrimaryWeapons
 #define OFFSET_BULLET_SPEED         0x1ED0
@@ -46,3 +45,4 @@
 #define GLOW_COLOR_G 0x1D4 //OK Script_CopyHighlightState mov tcx n�7  / m_highlightParams + 24 (0x18)
 #define GLOW_COLOR_B 0x1D8 //OK Script_CopyHighlightState mov tcx n�7  / m_highlightParams + 24 (0x18)
 #define GLOW_DISTANCE 0x3B4 //OK Script_Highlight_SetFarFadeDist / m_highlightServerFadeEndTimes + 52(0x34)
+#define OFFSET_ITEM_ID	0x1698

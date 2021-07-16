@@ -69,13 +69,17 @@ static void aimBotThreadFunc()
 			float c = std::sqrt((diference.x * diference.x) + (diference.z * diference.z));
 			float yaw = (atan2(diference.z, diference.x) * 180 / ((float)3.14159265358979323846)) - 90.0f;
 			float pitch = (atan2(diference.y, c) * 180 / ((float)3.14159265358979323846));
-			vec2 vAngles = localPlayer.getViewAngles();
+			vAngles = localPlayer.getViewAngles();
 			vAngles.x = yaw;
 			vAngles.y = pitch;
 
+			printf("%F",vAngles)
+
+			/*
+			
 			if (true)
 			{		
-				uint64_t Input{ 0x1C74380 };
+				uint64_t Input{ 0x1caa3f0 };
 
 				uint64_t m_pCommands;
 				apex.Read<uint64_t>(Input + 0xF8, m_pCommands);
@@ -113,7 +117,7 @@ static void aimBotThreadFunc()
 					apex.Write(old_command + 0xC, vAngles); //Write to viewangles
 					apex.Read<int>((current_command) + 1, next_cmd_number);
 				}
-			}
+			}*/
 		}
 				
 	}
