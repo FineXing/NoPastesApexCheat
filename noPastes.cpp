@@ -39,11 +39,7 @@ static void aimBotThreadFunc()
 		{
 		}
 		Player localPlayer = ptrToPlayer(localPlayerPtr);
-		Vector vAngles = localPlayer.getViewAngles();
-		std::cout<<vAngles.x;
-		std::cout<<vAngles.y;
-		printf("%.1f", vAngles.x);
-		printf("%.1f", vAngles.y);
+		std::vector<float> vAngles = localPlayer.getViewAngles();
 		for (int i = 0; i < 10000; i++)
 		{
 			uint64_t entPtr = 0;
