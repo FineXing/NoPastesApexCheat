@@ -37,12 +37,11 @@ static void aimBotThreadFunc()
 		uint64_t entityList = apexBase + OFFSET_ENTITYLIST;
 		if (localPlayerPtr = 0)
 		{
-			Player localPlayer = ptrToPlayer(localPlayerPtr);
-			Vector2D vAngles = localPlayer.getViewAngles();
-			printf("angles.x: %.1f", vAngles.x);
-			printf("angles.y: %.1f", vAngles.y);
-
 		}
+		Player localPlayer = ptrToPlayer(localPlayerPtr);
+		vec2 vAngles = localPlayer.getViewAngles();
+		printf("%.1f", vAngles.x);
+		printf("%.1f", vAngles.y);
 		for (int i = 0; i < 10000; i++)
 		{
 			uint64_t entPtr = 0;
