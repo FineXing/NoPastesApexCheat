@@ -1,13 +1,13 @@
 //offsets found from CasualX's offset dumper and unknowncheats
 // https://github.com/CasualX/apexbot , https://www.unknowncheats.me/forum/apex-legends/319804-apex-legends-reversal-structs-offsets.html
 #define OFFSET_ENTITYLIST			0x1911448
-#define OFFSET_LOCAL_ENT			0x1cc0ce8 //LocalPlayer
+#define OFFSET_LOCAL_ENT			0x1CC0CE8 //LocalPlayer
 #define OFFSET_NAME_LIST            0x81af640
 #define OFFSET_THIRDPERSON          0x018d42d0 + 0x6c //thirdperson_override + 0x6c
 
-#define OFFSET_TEAM					0x448 //m_iTeamNum
-#define OFFSET_HEALTH				0x438 //m_iHealth
-#define OFFSET_SHIELD				0x170 //m_shieldHealth
+#define OFFSET_TEAM					0x0448 //m_iTeamNum
+#define OFFSET_HEALTH				0x0438 //m_iHealth
+#define OFFSET_SHIELD				0x0170 //m_shieldHealth
 #define OFFSET_NAME					0x589 //m_iName
 #define OFFSET_SIGN_NAME			0x580 //m_iSignifierName
 #define OFFSET_ABS_VELOCITY         0x140 //m_vecAbsVelocity
@@ -15,7 +15,7 @@
 #define OFFSET_ZOOMING      		0x1be1 //m_bZooming
 #define OFFSET_ITEM_ID	0x1698
 
-#define OFFSET_LIFE_STATE			0x798  //m_lifeState, >0 = dead
+#define OFFSET_LIFE_STATE			0x0798  //m_lifeState, >0 = dead
 #define OFFSET_BLEED_OUT_STATE		0x2688 //m_bleedoutState, >0 = knocked
 
 #define OFFSET_ORIGIN				0x14c //m_vecAbsOrigin
@@ -27,7 +27,7 @@
 #define OFFSET_OBSERVER_MODE		0x334C //m_iObserverMode
 #define OFFSET_OBSERVING_TARGET		0x3350 //m_hObserverTarget
 
-#define OFFSET_MATRIX				0x1B3BD0
+#define OFFSET_MATRIX				0x1b3bd0
 #define OFFSET_RENDER				0x41e3588
 
 #define OFFSET_WEAPON				0x1a6c //m_latestPrimaryWeapons
