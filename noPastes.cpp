@@ -40,6 +40,8 @@ static void aimBotThreadFunc()
 		}
 		Player localPlayer = ptrToPlayer(localPlayerPtr);
 		Vector vAngles = localPlayer.getViewAngles();
+		std::cout<<vAngles.x;
+		std::cout<<vAngles.y;
 		printf("%.1f", vAngles.x);
 		printf("%.1f", vAngles.y);
 		for (int i = 0; i < 10000; i++)
@@ -58,7 +60,7 @@ static void aimBotThreadFunc()
 			//float distance = localPlayer.getPosition().DistTo(entPos);
 			if (true)
 			{		
-				Vector diference;
+				//Vector diference;
 				//diference.x = entPos.x - localPlayerPos.x;
 				//diference.y = entPos.y - localPlayerPos.y;
 				//diference.z = entPos.z - localPlayerPos.z;
