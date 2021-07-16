@@ -38,8 +38,11 @@ static void aimBotThreadFunc()
 		if (localPlayerPtr = 0)
 		{
 		}
-		Player localPlayer = ptrToPlayer(localPlayerPtr);
-		std::vector<float> vAngles = localPlayer.getViewAngles();
+		vec2 vAngles;
+		apex.Read<vec2>(localPlayerPtr + OFFSET_VIEWANGLES,vAngles);
+		printf("X: %lx\n", vAngles.x);
+		printf("Y: %lx\n", vAngles.y);
+
 		for (int i = 0; i < 10000; i++)
 		{
 			uint64_t entPtr = 0;
