@@ -23,7 +23,7 @@ public:
 	float getDistance();
 	Vector getPosition();
 	void setViewAngles(vec2 angles);
-	std::vector<float> getViewAngles();
+	vec2 getViewAngles();
 };
 
 class Item

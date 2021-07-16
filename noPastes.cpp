@@ -40,10 +40,12 @@ static void aimBotThreadFunc()
 		if (localPlayerPtr = 0)
 		{
 		}
+		Player localPlayer = ptrToPlayer(localPlayerPtr);
 		vec2 vAngles;
-		apex.Read<vec2>(localPlayerPtr + OFFSET_VIEWANGLES,vAngles);
-		printf("X: %lx\n", vAngles.x);
-		printf("Y: %lx\n", vAngles.y);
+		vec2 vAngles = localPlayer.getViewAngles();
+		vAngles.x = vAngles.x + 1.0f;
+		vAngles.y = vAngles.x + 1.0f;
+		localPlayer.setViewAngles(vAngles);
 
 		for (int i = 0; i < 10000; i++)
 		{
@@ -57,21 +59,21 @@ static void aimBotThreadFunc()
 			}
 
 			Vector entPos = ent.getPosition();
-			//Vector localPlayerPos = localPlayer.getPosition();
-			//float distance = localPlayer.getPosition().DistTo(entPos);
+			Vector localPlayerPos = localPlayer.getPosition();
+			float distance = localPlayer.getPosition().DistTo(entPos);
 			if (true)
 			{		
-				//Vector diference;
-				//diference.x = entPos.x - localPlayerPos.x;
-				//diference.y = entPos.y - localPlayerPos.y;
-				//diference.z = entPos.z - localPlayerPos.z;
-				//float c = std::sqrt((diference.x * diference.x) + (diference.z * diference.z));
-				//float yaw = (atan2(diference.z, diference.x) * 180 / ((float)3.14159265358979323846)) - 90.0f;
-				//float pitch = (atan2(diference.y, c) * 180 / ((float)3.14159265358979323846));
-				//vec2 vAngles = localPlayer.getViewAngles();
-				//vAngles.x = vAngles.x + 1.0f;
-				//.y = vAngles.x + 1.0f;
-				//localPlayer.setViewAngles(vAngles);
+				Vector diference;
+				diference.x = entPos.x - localPlayerPos.x;
+				diference.y = entPos.y - localPlayerPos.y;
+				diference.z = entPos.z - localPlayerPos.z;
+				float c = std::sqrt((diference.x * diference.x) + (diference.z * diference.z));
+				float yaw = (atan2(diference.z, diference.x) * 180 / ((float)3.14159265358979323846)) - 90.0f;
+				float pitch = (atan2(diference.y, c) * 180 / ((float)3.14159265358979323846));
+				vec2 vAngles = localPlayer.getViewAngles();
+				vAngles.x = vAngles.x + 1.0f;
+				vAngles.y = vAngles.x + 1.0f;
+				localPlayer.setViewAngles(vAngles);
 			}
 		}
 				

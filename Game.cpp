@@ -182,10 +182,10 @@ void Player::setViewAngles(vec2 angles)
 	apex.Write<vec2>(ptr+OFFSET_VIEWANGLES,angles);
 }
 
-std::vector<float> Player::getViewAngles()
+vec2 Player::getViewAngles()
 {
-	std::vector<float> angles;
-	apex.Read<std::vector<float>>(ptr +OFFSET_VIEWANGLES,angles);
+	vec2 angles;
+	apex.Read<vec2>(ptr +OFFSET_VIEWANGLES,angles);
 	return angles;
 }
 
