@@ -40,7 +40,7 @@ static void aimBotThreadFunc()
 		if (localPlayerPtr = 0)
 		{
 		}
-		Player localPlayer = ptrToPlayer(localPlayerPtr);
+		Entity localPlayer = ptrToEntity(localPlayerPtr);
 		vec2 vAngles = localPlayer.getViewAngles();
 		vAngles.x = vAngles.x + 1.0f;
 		vAngles.y = vAngles.x + 1.0f;
@@ -74,6 +74,8 @@ static void aimBotThreadFunc()
 
 			std::this_thread::sleep_for(std::chrono::milliseconds(600));
 			printf("%F\n",vAngles);
+
+			localPlayer.setViewAngles(vAngles);
 
 			/*
 			

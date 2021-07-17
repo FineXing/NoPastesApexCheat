@@ -12,6 +12,8 @@ public:
 	bool isGlowing();
 	float getDistance();
 	Vector getPosition();
+	vec2 getViewAngles();
+	void setViewAngles(vec2 angles);
 };
 
 class Player
