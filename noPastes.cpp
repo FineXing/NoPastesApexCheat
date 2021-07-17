@@ -69,8 +69,8 @@ static void aimBotThreadFunc()
 			float yaw = (atan2(diference.z, diference.x) * 180 / ((float)3.14159265358979323846)) - 90.0f;
 			float pitch = (atan2(diference.y, c) * 180 / ((float)3.14159265358979323846));
 			vAngles = localPlayer.getViewAngles();
-			vAngles.x = yaw;
-			vAngles.y = pitch;
+			vAngles.x = yaw + 1.f;
+			vAngles.y = pitch + 1.f;
 
 			std::this_thread::sleep_for(std::chrono::milliseconds(600));
 			printf("%F\n",vAngles);
