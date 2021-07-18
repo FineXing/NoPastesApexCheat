@@ -25,8 +25,10 @@ public:
 	bool isGlowing();
 	float getDistance();
 	Vector getPosition();
-	void setViewAngles(vec2 angles);
 	vec2 getViewAngles();
+	void setViewAngles(QAngle& angles);
+	void setViewAngles(SVector angles);
+	Vector getCamPosition();
 };
 
 class Item

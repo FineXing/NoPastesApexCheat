@@ -176,11 +176,6 @@ Vector Player::getPosition()
 	return entPos;
 }
 
-void Player::setViewAngles(vec2 angles)
-{
-	angles.Normalize();
-	apex.Write<vec2>(ptr+OFFSET_VIEWANGLES,angles);
-}
 
 vec2 Player::getViewAngles()
 {
@@ -206,3 +201,19 @@ vec2 Entity::getViewAngles()
 	return angles;
 }
 
+void Player::setViewAngles(QAngle& angles)
+{
+	setViewAngles(SVector(angles));
+}
+
+void Player::setViewAngles(SVector angles)
+{
+	apex.Write<SVector>(ptr +OFFSET_VIEWANGLES,angles);
+}
+
+Vector Player::getCamPosition()
+{
+	Vector pos;
+	apex.Read<Vector>(ptr + OFFSET_CAMERAPOS,pos);
+	return pos;
+}

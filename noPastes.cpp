@@ -43,7 +43,7 @@ static void aimBotThreadFunc()
 		for (int i = 0; i < 10000; i++)
 		{
 			vec2 vAngles;
-			Entity localPlayer = ptrToEntity(localPlayerPtr);
+			Player localPlayer = ptrToPlayer(localPlayerPtr);
 			uint64_t entPtr = 0;
 			apex.Read<uint64_t>(entityList + ((uint64_t)i << 5), entPtr);
 
@@ -60,8 +60,9 @@ static void aimBotThreadFunc()
 			{
 				Vector diference;
 				diference.x = entPos.x - localPlayerPos.x;
-				diference.y = entPos.y - localPlayerPos.y;
 				diference.z = entPos.z - localPlayerPos.z;
+				diference.y = (entPos.y )-(localPlayerPos.y+ localPlayer.getCamPosition().y);
+
 				float c = std::sqrt((diference.x * diference.x + diference.z * diference.z));
 				float yaw = (float)(atan2(diference.z, diference.x) * 180 / ((float)3.14159265358979323846)) - 90.0f;
 				float pitch = (float)(atan2(diference.y, c) * 180 / ((float)3.14159265358979323846));
