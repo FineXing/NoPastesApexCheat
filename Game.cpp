@@ -189,10 +189,14 @@ vec2 Player::getViewAngles()
 	return angles;
 }
 
-void Entity::setViewAngles(vec2 angles)
+void Entity::setViewAngles(QAngle& angles)
 {
-	angles.Normalize();
-	apex.Write<vec2>(ptr + OFFSET_VIEWANGLES,angles);
+	setViewAngles(SVector(angles));
+}
+
+void Entity::setViewAngles(SVector angles)
+{
+	apex.Write<SVector>(ptr +OFFSET_VIEWANGLES,angles);
 }
 
 vec2 Entity::getViewAngles()

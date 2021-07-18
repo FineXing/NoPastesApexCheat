@@ -1245,6 +1245,7 @@ public:
 
 	// No assignment operators either...
 	QAngle& operator=(const QAngle& src);
+	
 
 #ifndef VECTOR_NO_SLOW_OPERATIONS
 	// copy constructors
@@ -1264,6 +1265,7 @@ private:
 
 #endif
 };
+
 
 //-----------------------------------------------------------------------------
 // constructors

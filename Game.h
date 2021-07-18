@@ -13,7 +13,8 @@ public:
 	float getDistance();
 	Vector getPosition();
 	vec2 getViewAngles();
-	void setViewAngles(vec2 angles);
+	void setViewAngles(QAngle& angles);
+	void setViewAngles(SVector angles);
 };
 
 class Player

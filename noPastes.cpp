@@ -70,7 +70,11 @@ static void aimBotThreadFunc()
 
 			printf("%F\n",vAngles);
 
-			localPlayer.setViewAngles(vAngles);
+			QAngle Angles;
+			Angles.x = yaw;
+			Angles.y = pitch;
+			Angles = Normalize(Angles);
+			localPlayer.setViewAngles(Angles);
 			/*
 			
 			if (true)
