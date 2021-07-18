@@ -39,15 +39,13 @@ static void aimBotThreadFunc()
 		uint64_t entityList = apexBase + OFFSET_ENTITYLIST;
 		if (localPlayerPtr = 0)
 		{
+
 		}
-		Entity localPlayer = ptrToEntity(localPlayerPtr);
-		vec2 vAngles = localPlayer.getViewAngles();
-		vAngles.x = vAngles.x + 1.0f;
-		vAngles.y = vAngles.x + 1.0f;
-		localPlayer.setViewAngles(vAngles);
 
 		for (int i = 0; i < 10000; i++)
 		{
+			vec2 vAngles;
+			Entity localPlayer = ptrToEntity(localPlayerPtr);
 			uint64_t entPtr = 0;
 			apex.Read<uint64_t>(entityList + ((uint64_t)i << 5), entPtr);
 
@@ -72,11 +70,9 @@ static void aimBotThreadFunc()
 			vAngles.x = yaw + 1.f;
 			vAngles.y = pitch + 1.f;
 
-			std::this_thread::sleep_for(std::chrono::milliseconds(600));
 			printf("%F\n",vAngles);
 
 			localPlayer.setViewAngles(vAngles);
-
 			/*
 			
 			if (true)
@@ -121,7 +117,7 @@ static void aimBotThreadFunc()
 				}
 			}*/
 		}
-				
+		std::this_thread::sleep_for(std::chrono::milliseconds(600));
 	}
 }
 
