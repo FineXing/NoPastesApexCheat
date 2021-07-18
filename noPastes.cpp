@@ -70,11 +70,28 @@ static void aimBotThreadFunc()
 
 			printf("%F\n",vAngles);
 
-			QAngle Angles;
-			Angles.x = yaw;
-			Angles.y = pitch;
-			QAngle SetAngles = NormalizeQAngle(Angles);
-			localPlayer.setViewAngles(SetAngles);
+			QAngle angle;
+			angle.x = yaw;
+			angle.y = pitch;
+
+			if (angle.x > 89.0f)
+			{
+				angle.x -= 180.f;
+			}
+			if (angle.x < -89.0f) 
+			{
+				angle.x += 180.f;
+			}
+			if (angle.y > 180.f) 
+			{
+				angle.y -= 360.f;
+			}
+			if (angle.y < -180.f)
+			{
+				angle.y += 360.f;
+			}
+
+			localPlayer.setViewAngles(angle);
 			/*
 			
 			if (true)
