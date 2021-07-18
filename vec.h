@@ -19,6 +19,7 @@ struct SVector
 		y = q.y;
 		z = q.z;
 	}
+	
 };
 
 

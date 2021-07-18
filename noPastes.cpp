@@ -58,25 +58,25 @@ static void aimBotThreadFunc()
 			float distance = localPlayer.getPosition().DistTo(entPos);
 			if (true)
 			{
-				Vector diference;
-				diference.x = entPos.x - localPlayerPos.x;
-				diference.z = entPos.z - localPlayerPos.z;
-				diference.y = (entPos.y )-(localPlayerPos.y+ localPlayer.getCamPosition().y);
+				//Vector diference;
+				//diference.x = entPos.x - localPlayerPos.x;
+				//diference.z = entPos.z - localPlayerPos.z;
+				//diference.y = (entPos.y )-(localPlayerPos.y + localPlayer.getCamPosition().y);
 
-				float c = std::sqrt((diference.x * diference.x + diference.z * diference.z));
-				float yaw = (float)(atan2(diference.z, diference.x) * 180 / ((float)3.14159265358979323846)) - 90.0f;
-				float pitch = (float)(atan2(diference.y, c) * 180 / ((float)3.14159265358979323846));
+				//float c = std::sqrt((diference.x * diference.x + diference.z * diference.z));
+				//float yaw = (float)(atan2(diference.z, diference.x) * 180 / ((float)3.14159265358979323846)) - 90.0f;
+				//float pitch = (float)(-1*(atan2(diference.y, c) * 180 / ((float)3.14159265358979323846)));
 				vAngles = localPlayer.getViewAngles();
-				vAngles.x = yaw;
-				vAngles.y = pitch;
+				QAngle recoilAngles = localPlayer.getRecoilAngles();
+
 
 				printf("VAngles: %F\n",vAngles.x);
 				printf("VAngles: %F\n",vAngles.x);
 
 
 				QAngle angle;
-				angle.x = yaw;
-				angle.y = pitch;
+				angle.x = vAngles.x - recoilAngles.x;
+				angle.y = vAngles.y - recoilAngles.y;
 
 
 				if (angle.x > 89.0f)

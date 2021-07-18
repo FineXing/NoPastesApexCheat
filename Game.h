@@ -29,6 +29,8 @@ public:
 	void setViewAngles(QAngle& angles);
 	void setViewAngles(SVector angles);
 	Vector getCamPosition();
+	QAngle getRecoilAngles();
+
 };
 
 class Item
