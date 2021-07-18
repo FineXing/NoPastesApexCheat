@@ -56,47 +56,50 @@ static void aimBotThreadFunc()
 			Vector entPos = ent.getPosition();
 			Vector localPlayerPos = localPlayer.getPosition();
 			float distance = localPlayer.getPosition().DistTo(entPos);
-			Vector diference;
-			diference.x = entPos.x - localPlayerPos.x;
-			diference.y = entPos.y - localPlayerPos.y;
-			diference.z = entPos.z - localPlayerPos.z;
-			float c = std::sqrt((diference.x * diference.x) + (diference.z * diference.z));
-			float yaw = (atan2(diference.z, diference.x) * 180 / ((float)3.14159265358979323846)) - 90.0f;
-			float pitch = (atan2(diference.y, c) * 180 / ((float)3.14159265358979323846));
-			vAngles = localPlayer.getViewAngles();
-			vAngles.x = yaw;
-			vAngles.y = pitch;
-
-			printf("VAngles: %F\n",vAngles.x);
-			printf("VAngles: %F\n",vAngles.x);
-
-
-			QAngle angle;
-			angle.x = yaw;
-			angle.y = pitch;
-
-
-			if (angle.x > 89.0f)
+			if (distance>maxDistance)
 			{
-				angle.x -= 180.f;
-			}
-			if (angle.x < -89.0f) 
-			{
-				angle.x += 180.f;
-			}
-			if (angle.y > 180.f) 
-			{
-				angle.y -= 360.f;
-			}
-			if (angle.y < -180.f)
-			{
-				angle.y += 360.f;
-			}
+				Vector diference;
+				diference.x = entPos.x - localPlayerPos.x;
+				diference.y = entPos.y - localPlayerPos.y;
+				diference.z = entPos.z - localPlayerPos.z;
+				float c = std::sqrt((diference.x * diference.x) + (diference.z * diference.z));
+				float yaw = (atan2(diference.z, diference.x) * 180 / ((float)3.14159265358979323846)) - 90.0f;
+				float pitch = (atan2(diference.y, c) * 180 / ((float)3.14159265358979323846));
+				vAngles = localPlayer.getViewAngles();
+				vAngles.x = yaw;
+				vAngles.y = pitch;
 
-			printf("angle.x: %F\n",angle.x);
-			printf("angle.y: %F\n",angle.y);
+				printf("VAngles: %F\n",vAngles.x);
+				printf("VAngles: %F\n",vAngles.x);
 
-			localPlayer.setViewAngles(angle);
+
+				QAngle angle;
+				angle.x = yaw;
+				angle.y = pitch;
+
+
+				if (angle.x > 89.0f)
+				{
+					angle.x -= 180.f;
+				}
+				if (angle.x < -89.0f) 
+				{
+					angle.x += 180.f;
+				}
+				if (angle.y > 180.f) 
+				{
+					angle.y -= 360.f;
+				}
+				if (angle.y < -180.f)
+				{
+					angle.y += 360.f;
+				}
+
+				printf("angle.x: %F\n",angle.x);
+				printf("angle.y: %F\n",angle.y);
+
+				localPlayer.setViewAngles(angle);
+			}
 			/*
 			
 			if (true)
