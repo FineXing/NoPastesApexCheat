@@ -73,8 +73,8 @@ static void aimBotThreadFunc()
 			QAngle Angles;
 			Angles.x = yaw;
 			Angles.y = pitch;
-			Angles = Normalize(Angles);
-			localPlayer.setViewAngles(Angles);
+			QAngle SetAngles = NormalizeQAngle(Angles);
+			localPlayer.setViewAngles(SetAngles);
 			/*
 			
 			if (true)

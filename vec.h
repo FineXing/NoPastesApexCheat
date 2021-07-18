@@ -21,20 +21,20 @@ struct SVector
 	}
 };
 
-QAngle Normalize(QAngle angle)
+QAngle NormalizeQAngle(QAngle angle)
 {
-		if (angle.x > 89.0f)
-			angle.x -= 180.f;
+	if (angle.x > 89.0f)
+		angle.x -= 180.f;
 
-		if (angle.x < -89.0f)
-			angle.x += 180.f;
+	if (angle.x < -89.0f)
+		angle.x += 180.f;
 
-		if (angle.y > 180.f)
-			angle.y -= 360.f;
+	if (angle.y > 180.f)
+		angle.y -= 360.f;
 
-		if (angle.y < -180.f)
-			angle.y += 360.f;
-			return angle;
+	if (angle.y < -180.f)
+		angle.y += 360.f;
+	return angle;
 }
 
 struct vec2
