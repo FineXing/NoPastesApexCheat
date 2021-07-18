@@ -23,7 +23,9 @@ bool v1 = false;
 
 bool glowItems = true;
 float maxDistance = 200.0f * 40.0f;
-
+bool rcs = true;
+float rcsX = 10.f;
+float rcsY = 25.f;
 bool lookingForProcs = true; //read write - controls when cheat starts
 
 
@@ -36,22 +38,26 @@ static void aimBotThreadFunc()
 	printf("Started Aimbot Thread\n");
 	while (lookingForProcs ==false)
 	{
-		std::this_thread::sleep_for(std::chrono::milliseconds(600));
-		//localEnt, viewangles
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
+		//getting local player pointer checking it
 		uint64_t localPlayerPtr = 0;
 		apex.Read<uint64_t>(apexBase + OFFSET_LOCAL_ENT, localPlayerPtr);
 		uint64_t entityList = apexBase + OFFSET_ENTITYLIST;
 		if (localPlayerPtr == 0) continue;
 
+		//loop though all ents
 		for (int i = 0; i < 10000; i++)
 		{
-			vec2 oldVAngles;
+			
 			Player localPlayer = ptrToPlayer(localPlayerPtr);
+
+			//gets ptr for current ent in loop and transforms to ent class
 			uint64_t entPtr = 0;
 			apex.Read<uint64_t>(entityList + ((uint64_t)i << 5), entPtr);
-
 			Entity ent = ptrToEntity(entPtr);
+
+			//checks if ent is dummy 
 			if (!ent.isDummy())
 			{
 				continue;
@@ -60,51 +66,42 @@ static void aimBotThreadFunc()
 			Vector entPos = ent.getPosition();
 			Vector localPlayerPos = localPlayer.getPosition();
 			float distance = localPlayer.getPosition().DistTo(entPos);
-			if (true)
+			if(true)
 			{
-				//Vector diference;
-				//diference.x = entPos.x - localPlayerPos.x;
-				//diference.z = entPos.z - localPlayerPos.z;
-				//diference.y = (entPos.y )-(localPlayerPos.y + localPlayer.getCamPosition().y);
-
-				//float c = std::sqrt((diference.x * diference.x + diference.z * diference.z));
-				//float yaw = (float)(atan2(diference.z, diference.x) * 180 / ((float)3.14159265358979323846)) - 90.0f;
-				//float pitch = (float)(-1*(atan2(diference.y, c) * 180 / ((float)3.14159265358979323846)));
-				oldVAngles = localPlayer.getViewAngles();
-				QAngle recoilAngles = localPlayer.getRecoilAngles();
-
-
-				printf("oldVAngles: %F\n",oldVAngles.x);
-				printf("oldVAngles: %F\n",oldVAngles.x);
-
-
+				//view angle we are writing to player view angles
 				QAngle angle;
-				angle.x = oldVAngles.x + (oldRecoilAngle.x- recoilAngles.x);
-				angle.y = oldVAngles.y + (oldRecoilAngle.y- recoilAngles.y);
+				//getting original angles
+				vec2 oldVAngles = localPlayer.getViewAngles();
 
-				oldRecoilAngle = recoilAngles;
+				//recoil control system 
+				if (rcs)
+				{
+					QAngle recoilAngles = localPlayer.getRecoilAngles();
+					angle.x = oldVAngles.x + (oldRecoilAngle.x - recoilAngles.x)*(rcsX/100.f);
+               		angle.y = oldVAngles.y + (oldRecoilAngle.y - recoilAngles.y)*(rcsY/100.f);
 
-				if (angle.x > 89.0f)
-				{
-					angle.x -= 180.f;
+					//my shit attempt to clamp angles probs should make this a funtion
+					if (angle.x > 89.0f)
+					{
+						angle.x -= 180.f;
+					}
+					if (angle.x < -89.0f) 
+					{
+						angle.x += 180.f;
+					}
+					if (angle.y > 180.f) 
+					{
+						angle.y -= 360.f;
+					}
+					if (angle.y < -180.f)
+					{
+						angle.y += 360.f;
+					}
+					
+					//setting angles
+					localPlayer.setViewAngles(angle);
+					oldRecoilAngle = recoilAngles;
 				}
-				if (angle.x < -89.0f) 
-				{
-					angle.x += 180.f;
-				}
-				if (angle.y > 180.f) 
-				{
-					angle.y -= 360.f;
-				}
-				if (angle.y < -180.f)
-				{
-					angle.y += 360.f;
-				}
-
-				printf("angle.x: %F\n",angle.x);
-				printf("angle.y: %F\n",angle.y);
-
-				localPlayer.setViewAngles(angle);
 			}
 			/*
 			
@@ -363,7 +360,7 @@ int main(int argc, char* argv[])
 	printf("Infinite While Loop Starting\n");
 	while (lookingForProcs == false)
 	{
-		std::this_thread::sleep_for(std::chrono::milliseconds(10));
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 		apex.check_proc();
 	}
 }
