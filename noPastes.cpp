@@ -48,15 +48,14 @@ static void aimBotThreadFunc()
 			apex.Read<uint64_t>(entityList + ((uint64_t)i << 5), entPtr);
 
 			Entity ent = ptrToEntity(entPtr);
-			if (ent.isDummy())
+			if (!ent.isDummy())
 			{
-
+				continue;
 			}
 
 			Vector entPos = ent.getPosition();
 			Vector localPlayerPos = localPlayer.getPosition();
 			float distance = localPlayer.getPosition().DistTo(entPos);
-
 			Vector diference;
 			diference.x = entPos.x - localPlayerPos.x;
 			diference.y = entPos.y - localPlayerPos.y;
@@ -65,14 +64,17 @@ static void aimBotThreadFunc()
 			float yaw = (atan2(diference.z, diference.x) * 180 / ((float)3.14159265358979323846)) - 90.0f;
 			float pitch = (atan2(diference.y, c) * 180 / ((float)3.14159265358979323846));
 			vAngles = localPlayer.getViewAngles();
-			vAngles.x = yaw + 1.f;
-			vAngles.y = pitch + 1.f;
+			vAngles.x = yaw;
+			vAngles.y = pitch;
 
-			printf("%F\n",vAngles);
+			printf("VAngles: %F\n",vAngles.x);
+			printf("VAngles: %F\n",vAngles.x);
+
 
 			QAngle angle;
 			angle.x = yaw;
 			angle.y = pitch;
+
 
 			if (angle.x > 89.0f)
 			{
@@ -90,6 +92,9 @@ static void aimBotThreadFunc()
 			{
 				angle.y += 360.f;
 			}
+
+			printf("angle.x: %F\n",angle.x);
+			printf("angle.y: %F\n",angle.y);
 
 			localPlayer.setViewAngles(angle);
 			/*
