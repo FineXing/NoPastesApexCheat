@@ -29,7 +29,7 @@ bool lookingForProcs = true; //read write - controls when cheat starts
 
 static void aimBotThreadFunc()
 {
-	printf("Started Aimbot Thread");
+	printf("Started Aimbot Thread\n");
 	while (lookingForProcs ==false)
 	{
 		std::this_thread::sleep_for(std::chrono::milliseconds(600));
@@ -56,15 +56,15 @@ static void aimBotThreadFunc()
 			Vector entPos = ent.getPosition();
 			Vector localPlayerPos = localPlayer.getPosition();
 			float distance = localPlayer.getPosition().DistTo(entPos);
-			if (distance>maxDistance)
+			if (true)
 			{
 				Vector diference;
 				diference.x = entPos.x - localPlayerPos.x;
 				diference.y = entPos.y - localPlayerPos.y;
 				diference.z = entPos.z - localPlayerPos.z;
-				float c = std::sqrt((diference.x * diference.x) + (diference.z * diference.z));
-				float yaw = (atan2(diference.z, diference.x) * 180 / ((float)3.14159265358979323846)) - 90.0f;
-				float pitch = (atan2(diference.y, c) * 180 / ((float)3.14159265358979323846));
+				float c = std::sqrt((diference.x * diference.x + diference.z * diference.z));
+				float yaw = (float)(atan2(diference.z, diference.x) * 180 / ((float)3.14159265358979323846)) - 90.0f;
+				float pitch = (float)(atan2(diference.y, c) * 180 / ((float)3.14159265358979323846));
 				vAngles = localPlayer.getViewAngles();
 				vAngles.x = yaw;
 				vAngles.y = pitch;
