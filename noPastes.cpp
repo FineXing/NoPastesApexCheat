@@ -29,6 +29,10 @@ bool lookingForProcs = true; //read write - controls when cheat starts
 
 static void aimBotThreadFunc()
 {
+	QAngle oldRecoilAngle;
+	oldRecoilAngle.x = 0.f;
+	oldRecoilAngle.y= 0.f;
+	oldRecoilAngle.z =0.f;
 	printf("Started Aimbot Thread\n");
 	while (lookingForProcs ==false)
 	{
@@ -42,7 +46,7 @@ static void aimBotThreadFunc()
 
 		for (int i = 0; i < 10000; i++)
 		{
-			vec2 vAngles;
+			vec2 oldVAngles;
 			Player localPlayer = ptrToPlayer(localPlayerPtr);
 			uint64_t entPtr = 0;
 			apex.Read<uint64_t>(entityList + ((uint64_t)i << 5), entPtr);
@@ -66,18 +70,19 @@ static void aimBotThreadFunc()
 				//float c = std::sqrt((diference.x * diference.x + diference.z * diference.z));
 				//float yaw = (float)(atan2(diference.z, diference.x) * 180 / ((float)3.14159265358979323846)) - 90.0f;
 				//float pitch = (float)(-1*(atan2(diference.y, c) * 180 / ((float)3.14159265358979323846)));
-				vAngles = localPlayer.getViewAngles();
+				oldVAngles = localPlayer.getViewAngles();
 				QAngle recoilAngles = localPlayer.getRecoilAngles();
 
 
-				printf("VAngles: %F\n",vAngles.x);
-				printf("VAngles: %F\n",vAngles.x);
+				printf("oldVAngles: %F\n",oldVAngles.x);
+				printf("oldVAngles: %F\n",oldVAngles.x);
 
 
 				QAngle angle;
-				angle.x = vAngles.x - recoilAngles.x;
-				angle.y = vAngles.y - recoilAngles.y;
+				angle.x = oldVAngles.x + (oldRecoilAngle.x- recoilAngles.x);
+				angle.y = oldVAngles.y + (oldRecoilAngle.y- recoilAngles.y);
 
+				oldRecoilAngle = recoilAngles;
 
 				if (angle.x > 89.0f)
 				{
