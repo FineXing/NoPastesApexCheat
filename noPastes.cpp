@@ -21,12 +21,45 @@ uint64_t clientBase; // client base addr
 
 bool v1 = false;
 
-bool glowItems = true;
+bool glowItemsEnabled = false;
+bool glowPlayersEnabled = false;
+bool aimbotEnabled = true;
 float maxDistance = 200.0f * 40.0f;
 bool rcs = true;
 float rcsX = 10.f;
 float rcsY = 25.f;
 bool lookingForProcs = true; //read write - controls when cheat starts
+
+typedef struct player
+{
+	uint64_t playerPtr;
+	float locX;
+	float locY;
+	float locZ;
+	int team = 0;
+
+}player;
+
+static void updatePlayerList()
+{
+	uint64_t entList = apexBase + OFFSET_ENTITYLIST;
+	while(true)
+	{
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
+		for(int i = 0; i<=100;i++)
+		{
+			uint64_t localPlayer = 0;
+			apex.Read<uint64_t>(apexBase + OFFSET_LOCAL_ENT, localPlayer);
+
+			uint64_t curEnt = 0;
+			apex.Read<uint64_t>(entList + ((uint64_t)i << 5), curEnt);
+			if (curEnt == 0)continue;
+			if(curEnt == localPlayer)continue;
+		}
+	}
+	
+}
 
 
 static void aimBotThreadFunc()
@@ -38,69 +71,71 @@ static void aimBotThreadFunc()
 	printf("Started Aimbot Thread\n");
 	while (lookingForProcs ==false)
 	{
-		std::this_thread::sleep_for(std::chrono::milliseconds(1));
-
-		//getting local player pointer checking it
-		uint64_t localPlayerPtr = 0;
-		apex.Read<uint64_t>(apexBase + OFFSET_LOCAL_ENT, localPlayerPtr);
-		uint64_t entityList = apexBase + OFFSET_ENTITYLIST;
-		if (localPlayerPtr == 0) continue;
-
-		//loop though all ents
-		for (int i = 0; i < 10000; i++)
+		while (aimbotEnabled)
 		{
+			std::this_thread::sleep_for(std::chrono::milliseconds(1));
+			//getting local player pointer checking it
+			uint64_t localPlayerPtr = 0;
+			apex.Read<uint64_t>(apexBase + OFFSET_LOCAL_ENT, localPlayerPtr);
+			uint64_t entityList = apexBase + OFFSET_ENTITYLIST;
+			if (localPlayerPtr == 0) continue;
+
+			//loop though all ents
+			for (int i = 0; i < 10000; i++)
+			{
 			
-			Player localPlayer = ptrToPlayer(localPlayerPtr);
+				Player localPlayer = ptrToPlayer(localPlayerPtr);
 
-			//gets ptr for current ent in loop and transforms to ent class
-			uint64_t entPtr = 0;
-			apex.Read<uint64_t>(entityList + ((uint64_t)i << 5), entPtr);
-			Entity ent = ptrToEntity(entPtr);
+				//gets ptr for current ent in loop and transforms to ent class
+				uint64_t entPtr = 0;
+				apex.Read<uint64_t>(entityList + ((uint64_t)i << 5), entPtr);
+				Entity ent = ptrToEntity(entPtr);
 
-			//checks if ent is dummy 
-			if (!ent.isDummy())
-			{
-				continue;
-			}
-
-			Vector entPos = ent.getPosition();
-			Vector localPlayerPos = localPlayer.getPosition();
-			float distance = localPlayer.getPosition().DistTo(entPos);
-			if(true)
-			{
-				//view angle we are writing to player view angles
-				QAngle angle;
-				//getting original angles
-				vec2 oldVAngles = localPlayer.getViewAngles();
-
-				//recoil control system 
-				if (rcs)
+				//checks if ent is dummy 
+				if (!ent.isDummy())
 				{
-					QAngle recoilAngles = localPlayer.getRecoilAngles();
-					angle.x = oldVAngles.x + (oldRecoilAngle.x - recoilAngles.x)*(rcsX/100.f);
-               		angle.y = oldVAngles.y + (oldRecoilAngle.y - recoilAngles.y)*(rcsY/100.f);
+					continue;
+				}
 
-					//my shit attempt to clamp angles probs should make this a funtion
-					if (angle.x > 89.0f)
+				Vector entPos = ent.getPosition();
+				Vector localPlayerPos = localPlayer.getPosition();
+				float distance = localPlayer.getPosition().DistTo(entPos);
+				if(true)
+				{
+					//view angle we are writing to player view angles
+					QAngle angle;
+					//getting original angles
+					vec2 oldVAngles = localPlayer.getViewAngles();
+
+					//recoil control system 
+					if (rcs)
 					{
-						angle.x -= 180.f;
-					}
-					if (angle.x < -89.0f) 
-					{
-						angle.x += 180.f;
-					}
-					if (angle.y > 180.f) 
-					{
-						angle.y -= 360.f;
-					}
-					if (angle.y < -180.f)
-					{
-						angle.y += 360.f;
-					}
+						QAngle recoilAngles = localPlayer.getRecoilAngles();
+						angle.x = oldVAngles.x + (oldRecoilAngle.x - recoilAngles.x)*(rcsX/100.f);
+               			angle.y = oldVAngles.y + (oldRecoilAngle.y - recoilAngles.y)*(rcsY/100.f);
+
+						//my shit attempt to clamp angles probs should make this a funtion
+						if (angle.x > 89.0f)
+						{
+							angle.x -= 180.f;
+						}
+						if (angle.x < -89.0f) 
+						{
+							angle.x += 180.f;
+						}
+						if (angle.y > 180.f) 
+						{
+							angle.y -= 360.f;
+						}
+						if (angle.y < -180.f)
+						{
+							angle.y += 360.f;
+						}
 					
-					//setting angles
-					localPlayer.setViewAngles(angle);
-					oldRecoilAngle = recoilAngles;
+						//setting angles
+						localPlayer.setViewAngles(angle);
+						oldRecoilAngle = recoilAngles;
+						}
 				}
 			}
 			/*
@@ -189,21 +224,25 @@ static void playerGlowThread()
 
 	while (lookingForProcs == false&&v1 == false)
 	{
-		std::this_thread::sleep_for(std::chrono::milliseconds(1));
-		for (int i = 0; i < 100; i++)
+		while (glowPlayersEnabled)
 		{
-			uint64_t entityList = apexBase + OFFSET_ENTITYLIST;
-			uint64_t entPtr = 0;
-			apex.Read<uint64_t>(entityList + ((uint64_t)i << 5), entPtr);
-
-			Entity ent = ptrToEntity(entPtr);
-			if (ent.isPlayer())
+			std::this_thread::sleep_for(std::chrono::milliseconds(1));
+			for (int i = 0; i < 100; i++)
 			{
-				ent.enableGlow(0,122,0);
+				uint64_t entityList = apexBase + OFFSET_ENTITYLIST;
+				uint64_t entPtr = 0;
+				apex.Read<uint64_t>(entityList + ((uint64_t)i << 5), entPtr);
+
+				Entity ent = ptrToEntity(entPtr);
+				if (ent.isPlayer())
+				{
+					ent.enableGlow(0,122,0);
+				}
 			}
+			std::this_thread::sleep_for(std::chrono::milliseconds(600));
 		}
 	}
-	std::this_thread::sleep_for(std::chrono::milliseconds(600));
+
 }
 
 static void itemGlowThread()
@@ -213,6 +252,8 @@ static void itemGlowThread()
 	while (lookingForProcs == false&&v1 == true)
 	{
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
+		
 		for (int i = 0; i < 10000; i++)
 		{
 			uint64_t entityList = apexBase + OFFSET_ENTITYLIST;
@@ -245,20 +286,22 @@ static void itemGlowThread()
 
 	while (lookingForProcs == false && v1 == false)
 	{
-		std::this_thread::sleep_for(std::chrono::milliseconds(1));
-		for (int i = 0; i < 10000;i++)
+		while (glowItemsEnabled)
 		{
-			uint64_t entityList = apexBase + OFFSET_ENTITYLIST;
-			uint64_t entPtr = 0;
-			apex.Read<uint64_t>(entityList + ((uint64_t)i << 5), entPtr);
-
-			Entity ent = ptrToEntity(entPtr);
-			if (ent.isItem())
+			std::this_thread::sleep_for(std::chrono::milliseconds(1));
+			for (int i = 0; i < 10000;i++)
 			{
-				Item item = ptrToItem(entPtr);
-				if (item.isGlowing() == false)
+				uint64_t entityList = apexBase + OFFSET_ENTITYLIST;
+				uint64_t entPtr = 0;
+				apex.Read<uint64_t>(entityList + ((uint64_t)i << 5), entPtr);
+
+				Entity ent = ptrToEntity(entPtr);
+				if (ent.isItem())
 				{
-					if (item.getItemID() == LIGHT_ROUNDS || item.getItemID() == LIGHT_MAGAZINE_LV3 || item.getItemID() == HEAVY_MAGAZINE_LV3 || item.getItemID() == BODY_ARMOR_EVO3 || item.getItemID() == HEAVY_ROUNDS || item.getItemID() == BACKPACK_LV3 || item.getItemID() == HCOG_CLASSIC || item.getItemID() == HCOG_BRUISER || item.getItemID() == BARREL_STABILIZER_LV3)
+					Item item = ptrToItem(entPtr);
+					if (item.isGlowing() == false)
+					{
+						if (item.getItemID() == LIGHT_ROUNDS || item.getItemID() == LIGHT_MAGAZINE_LV3 || item.getItemID() == HEAVY_MAGAZINE_LV3 || item.getItemID() == BODY_ARMOR_EVO3 || item.getItemID() == HEAVY_ROUNDS || item.getItemID() == BACKPACK_LV3 || item.getItemID() == HCOG_CLASSIC || item.getItemID() == HCOG_BRUISER || item.getItemID() == BARREL_STABILIZER_LV3)
 					{
 						item.enableGlow(0, 122, 122);
 					}
@@ -268,8 +311,12 @@ static void itemGlowThread()
 					}
 				}
 			}
+			std::this_thread::sleep_for(std::chrono::milliseconds(600));
 		}
-		std::this_thread::sleep_for(std::chrono::milliseconds(600));
+		/* code */
+		
+
+		}
 	}
 
 }
