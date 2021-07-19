@@ -50,7 +50,7 @@ struct GlowMode
 };
 
 
-
+uintptr_t getBestEnemey();
 Item ptrToItem(uintptr_t ptr);
 Entity ptrToEntity(uintptr_t ptr);
 Player ptrToPlayer(uintptr_t ptr);

@@ -40,6 +40,8 @@ typedef struct player
 
 }player;
 
+
+//UNUSED UNTESTED AS OF RN
 static void updatePlayerList()
 {
 	uint64_t entList = apexBase + OFFSET_ENTITYLIST;
@@ -64,11 +66,12 @@ static void updatePlayerList()
 
 static void aimBotThreadFunc()
 {
+	printf("Started Aimbot Thread\n");
+	//previus recoil angle (keeps from jumping down)
 	QAngle oldRecoilAngle;
 	oldRecoilAngle.x = 0.f;
 	oldRecoilAngle.y= 0.f;
 	oldRecoilAngle.z =0.f;
-	printf("Started Aimbot Thread\n");
 	while (lookingForProcs ==false)
 	{
 		while (aimbotEnabled)
@@ -100,6 +103,7 @@ static void aimBotThreadFunc()
 				Vector entPos = ent.getPosition();
 				Vector localPlayerPos = localPlayer.getPosition();
 				float distance = localPlayer.getPosition().DistTo(entPos);
+				printf("dist: %F\n", distance);
 				if(true)
 				{
 					//view angle we are writing to player view angles
@@ -131,15 +135,16 @@ static void aimBotThreadFunc()
 						{
 							angle.y += 360.f;
 						}
-					
+
 						//setting angles
 						localPlayer.setViewAngles(angle);
 						oldRecoilAngle = recoilAngles;
 						}
+
+					
 				}
 			}
 			/*
-			
 			if (true)
 			{		
 				uint64_t Input{ 0x1caa3f0 };
@@ -180,7 +185,8 @@ static void aimBotThreadFunc()
 					apex.Write(old_command + 0xC, vAngles); //Write to viewangles
 					apex.Read<int>((current_command) + 1, next_cmd_number);
 				}
-			}*/
+			}
+			*/
 		}
 	}
 }

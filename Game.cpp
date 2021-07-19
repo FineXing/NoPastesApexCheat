@@ -4,6 +4,7 @@
 
 
 extern Memory apex;
+extern uint64_t apexBase;
 
 bool Entity::isPlayer()
 {
@@ -143,6 +144,16 @@ Player ptrToPlayer(uintptr_t ptr)
 	Player player = Player();
 	player.ptr = ptr;
 	return player;
+}
+
+uintptr_t getBestEnemey()
+{
+	uint64_t entityList = apexBase + OFFSET_ENTITYLIST;
+	
+	for(int i = 0; i <10000;i++)
+	{
+
+	}
 }
 
 void Player::enableGlow(float R, float G, float B)
