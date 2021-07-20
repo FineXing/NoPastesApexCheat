@@ -117,6 +117,21 @@ static void aimBotThreadFunc()
 						QAngle recoilAngles = localPlayer.getRecoilAngles();
 						angle.x = oldVAngles.x + (oldRecoilAngle.x - recoilAngles.x)*(rcsX/100.f);
                			angle.y = oldVAngles.y + (oldRecoilAngle.y - recoilAngles.y)*(rcsY/100.f);
+						
+						if(distance <143.f)
+						{
+							//shit = ent pos relitive to localplayer
+							Vector shit = entPos - localPlayerPos;
+							
+							float aSQ = pow(shit.x,2);
+							float bSQ = pow( shit.y, 2);
+
+							float c = sqrt( aSQ + bSQ );
+
+							angle.x = angle.x + atan(aSQ/bSQ);
+							angle.y = angle.y + (-atan(c/shit.z));
+
+						}
 
 						//my shit attempt to clamp angles probs should make this a funtion
 						if (angle.x > 89.0f)
@@ -139,9 +154,7 @@ static void aimBotThreadFunc()
 						//setting angles
 						localPlayer.setViewAngles(angle);
 						oldRecoilAngle = recoilAngles;
-						}
-
-					
+					}		
 				}
 			}
 			/*
