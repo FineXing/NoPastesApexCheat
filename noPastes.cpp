@@ -132,8 +132,8 @@ static void aimBotThreadFunc()
 
 							float ptich = -(atan2(shit.y,c));
 
-							angle.x = oldVAngles.x + yaw;
-							angle.y = oldVAngles.y + ptich;
+							angle.x = oldVAngles.x + ptich;
+							angle.y = oldVAngles.y + yaw;
 
 							//my shit attempt to clamp angles probs should make this a funtion
 							if (angle.x > 89.0f)
