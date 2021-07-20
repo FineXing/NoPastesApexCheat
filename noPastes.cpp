@@ -120,7 +120,7 @@ static void aimBotThreadFunc()
 					angle.z = 0.f;
 
 					//getting original angles
-					vec2 oldVAngles = localPlayer.getViewAngles();
+					SVector oldVAngles = localPlayer.getViewAngles();
 
 					//recoil control system 
 					if (rcs)
@@ -137,7 +137,7 @@ static void aimBotThreadFunc()
 							float ptich = (-(atan2(shit.z,c)))*(180/M_PI);
 
 							float diferenceYaw = yaw - oldVAngles.x;
-							float diferencePitch = ptich -oldVAngles.y;
+							float diferencePitch = ptich - oldVAngles.y;
 
 							angle.x += diferenceYaw / smoothing;
 							angle.y += diferencePitch / smoothing;

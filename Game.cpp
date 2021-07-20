@@ -188,10 +188,10 @@ Vector Player::getPosition()
 }
 
 
-vec2 Player::getViewAngles()
+QAngle Player::getViewAngles()
 {
-	vec2 angles;
-	apex.Read<vec2>(ptr +OFFSET_VIEWANGLES,angles);
+	QAngle angles;
+	apex.Read<QAngle>(ptr +OFFSET_VIEWANGLES,angles);
 	return angles;
 }
 
@@ -205,10 +205,10 @@ void Entity::setViewAngles(SVector angles)
 	apex.Write<SVector>(ptr +OFFSET_VIEWANGLES,angles);
 }
 
-vec2 Entity::getViewAngles()
+QAngle Entity::getViewAngles()
 {
-	vec2 angles;
-	apex.Read<vec2>(ptr + OFFSET_VIEWANGLES, angles);
+	QAngle angles;
+	apex.Read<QAngle>(ptr + OFFSET_VIEWANGLES, angles);
 	return angles;
 }
 

@@ -12,7 +12,7 @@ public:
 	bool isGlowing();
 	float getDistance();
 	Vector getPosition();
-	vec2 getViewAngles();
+	QAngle getViewAngles();
 	void setViewAngles(QAngle& angles);
 	void setViewAngles(SVector angles);
 	Vector getCamPosition();
@@ -26,7 +26,7 @@ public:
 	bool isGlowing();
 	float getDistance();
 	Vector getPosition();
-	vec2 getViewAngles();
+	QAngle getViewAngles();
 	void setViewAngles(QAngle& angles);
 	void setViewAngles(SVector angles);
 	Vector getCamPosition();
