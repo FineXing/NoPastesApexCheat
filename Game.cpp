@@ -249,7 +249,7 @@ Vector Entity::getCamPosition()
 
 float getAngle(float angle)
 {
-	if(fmodf(angle,180)<0)
+	if(fmod(angle,180)<0)
 	{
 		return angle;
 	}
