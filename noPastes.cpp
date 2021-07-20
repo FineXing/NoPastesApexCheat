@@ -128,9 +128,9 @@ static void aimBotThreadFunc()
 
 							float c = sqrt(pow(shit.x,2) + pow(shit.y,2));
 
-							float yaw = (atan2(shit.z,shit.x))*(180/M_PI);
+							float yaw = (atan2(shit.y,shit.x))*(180/M_PI);
 
-							float ptich = (-(atan2(shit.y,c)))*(180/M_PI);
+							float ptich = (-(atan2(shit.z,c)))*(180/M_PI);
 
 							angle.x = ptich;
 							angle.y = yaw;
