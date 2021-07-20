@@ -109,6 +109,10 @@ static void aimBotThreadFunc()
 				{
 					//view angle we are writing to player view angles
 					QAngle angle;
+					angle.x = 0.f;
+					angle.y = 0.f;
+					angle.z = 0.f;
+
 					//getting original angles
 					vec2 oldVAngles = localPlayer.getViewAngles();
 
