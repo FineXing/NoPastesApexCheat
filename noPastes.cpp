@@ -101,7 +101,7 @@ static void aimBotThreadFunc()
 				}
 
 				Vector entPos = ent.getPosition();
-				Vector localPlayerPos = localPlayer.getPosition();
+				Vector localPlayerPos = localPlayer.getCamPosition();
 				float distance = localPlayer.getPosition().DistTo(entPos);
 				printf("dist: %F\n", distance);
 				printf("index: %d\n",i);
@@ -126,9 +126,9 @@ static void aimBotThreadFunc()
 
 							float c = sqrt(pow(shit.x,2) + pow(shit.z,2));
 
-							float yaw = atan2(shit.z,shit.x) - 90.f;
+							float yaw = atan2(shit.z,shit.x);
 
-							float ptich = -1*(atan2(shit.y,c));
+							float ptich = -(atan2(shit.y,c));
 
 							angle.x = oldVAngles.x + yaw;
 							angle.y = oldVAngles.y + ptich;
