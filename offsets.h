@@ -17,7 +17,7 @@
 #define OFFSET_LIFE_STATE			0x798  //m_lifeState, >0 = dead
 #define OFFSET_BLEED_OUT_STATE		0x26c8 //m_bleedoutState, >0 = knocked
 
-#define OFFSET_ORIGIN				0x014c //m_vecAbsOrigin
+#define OFFSET_ORIGIN				0x14c //m_vecAbsOrigin
 #define OFFSET_BONES				0xF38 //m_bConstrainBetweenEndpoints
 #define OFFSET_AIMPUNCH				0x2430 //m_currentFrameLocalPlayer.m_vecPunchWeapon_Angle
 #define OFFSET_CAMERAPOS			0x1ED0

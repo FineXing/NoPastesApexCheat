@@ -100,9 +100,11 @@ static void aimBotThreadFunc()
 					continue;
 				}
 
-				Vector entPos = ent.getCamPosition();
+				Vector entPos = ent.getPosition();
 				Vector localPlayerPos = localPlayer.getCamPosition();
 				float distance = localPlayer.getPosition().DistTo(entPos);
+				printf("entpos.x: %F\n",entPos.x);
+				printf("playerpos.x: %F\n",localPlayerPos.x);
 				printf("dist: %F\n", distance);
 				printf("index: %d\n",i);
 				if(true)
