@@ -134,6 +134,10 @@ static void aimBotThreadFunc()
 
 							angle.x = oldVAngles.x + ptich;
 							angle.y = oldVAngles.y + yaw;
+							
+							printf("Pitch: %f\n", ptich);
+							printf("yaw: %f\n", yaw);
+
 
 							//my shit attempt to clamp angles probs should make this a funtion
 							if (angle.x > 89.0f)
