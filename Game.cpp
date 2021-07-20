@@ -246,3 +246,15 @@ Vector Entity::getCamPosition()
 	apex.Read<Vector>(ptr + OFFSET_CAMERAPOS,pos);
 	return pos;
 }
+
+float getAngle(float angle)
+{
+	if(fmodf(angle,180)<0)
+	{
+		return angle;
+	}
+	else
+	{
+		return angle + 180.f;
+	}
+}

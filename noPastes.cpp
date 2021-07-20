@@ -115,13 +115,11 @@ static void aimBotThreadFunc()
 				{
 					//view angle we are writing to player view angles
 					QAngle angle;
-					angle.x = 0.f;
-					angle.y = 0.f;
-					angle.z = 0.f;
 
 					//getting original angles
-					SVector oldVAngles = localPlayer.getViewAngles();
+					QAngle oldVAngles = localPlayer.getViewAngles();
 
+					printf("oldVAngles.x: %f oldVAngles.y: %f oldVAngles.z: %f",oldVAngles.x,oldVAngles.y,oldVAngles.z);
 					//recoil control system 
 					if (rcs)
 					{
@@ -139,9 +137,20 @@ static void aimBotThreadFunc()
 							float diferencePitch = ptich - oldVAngles.x;
 							float diferenceYaw = yaw - oldVAngles.y;
 
+							float testYaw = getAngle(angle.y);
+
+							if (testYaw >=0 || testYaw <= 180)
+							{
+								angle.y += diferenceYaw / smoothing;
+							}
+							else if(testYaw>= 0 || testYaw <-180)
+							{
+								angle.y -= diferenceYaw / smoothing;
+							}
+							
 
 							angle.x += diferencePitch / smoothing;
-							angle.y += diferenceYaw / smoothing;
+
 
 							//angle.x = ptich;
 							//angle.y = yaw;
@@ -163,7 +172,7 @@ static void aimBotThreadFunc()
 							{
 								angle.y += 360.f;
 							}
-
+							localPlayer.setViewAngles(angle);
 						}
 
 						//QAngle recoilAngles = localPlayer.getRecoilAngles();
@@ -173,11 +182,7 @@ static void aimBotThreadFunc()
 						
 
 						//setting angles
-						if(angle.x == 0.f && angle.y == 0.f && angle.z == 0.f)
-						{
-							continue;
-						}
-						localPlayer.setViewAngles(angle);
+
 						//oldRecoilAngle = recoilAngles;
 					}		
 				}

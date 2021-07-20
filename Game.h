@@ -51,6 +51,8 @@ struct GlowMode
 };
 
 
+float getAngle(float angle);
+
 uintptr_t getBestEnemey();
 Item ptrToItem(uintptr_t ptr);
 Entity ptrToEntity(uintptr_t ptr);
