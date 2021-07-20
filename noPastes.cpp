@@ -104,6 +104,7 @@ static void aimBotThreadFunc()
 				Vector localPlayerPos = localPlayer.getPosition();
 				float distance = localPlayer.getPosition().DistTo(entPos);
 				printf("dist: %F\n", distance);
+				printf("index: %d\n",i);
 				if(true)
 				{
 					//view angle we are writing to player view angles
@@ -125,8 +126,8 @@ static void aimBotThreadFunc()
 
 							float ptich = -1*(atan2(shit.y,c));
 
-							angle.x = yaw;
-							angle.y = ptich;
+							angle.x = oldVAngles.x + yaw;
+							angle.y = oldVAngles.y + ptich;
 
 							//my shit attempt to clamp angles probs should make this a funtion
 							if (angle.x > 89.0f)
