@@ -108,7 +108,7 @@ static void aimBotThreadFunc()
 
 				//printf("entpos.x: %F\n",entPos.x);
 				//printf("playerpos.x: %F\n",localPlayerPos.x);
-				//printf("dist: %F\n", distance);
+				printf("dist: %F\n", distance);
 				//printf("index: %d\n",i);
 
 				if(true)
@@ -136,14 +136,15 @@ static void aimBotThreadFunc()
 
 							float ptich = (-(atan2(shit.z,c)))*(180/M_PI);
 
-							float diferenceYaw = yaw - oldVAngles.x;
-							float diferencePitch = ptich - oldVAngles.y;
+							float diferencePitch = ptich - oldVAngles.x;
+							float diferenceYaw = yaw - oldVAngles.y;
 
-							angle.x += diferenceYaw / smoothing;
-							angle.y += diferencePitch / smoothing;
 
-							angle.x = ptich;
-							angle.y = yaw;
+							angle.x += diferencePitch / smoothing;
+							angle.y += diferenceYaw / smoothing;
+
+							//angle.x = ptich;
+							//angle.y = yaw;
 
 							//my shit attempt to clamp angles probs should make this a funtion
 							if (angle.x > 89.0f)
