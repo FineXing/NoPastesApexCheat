@@ -114,8 +114,6 @@ static void aimBotThreadFunc()
 					//recoil control system 
 					if (rcs)
 					{
-
-						
 						if(distance <143.f)
 						{
 							//shit = ent pos relitive to localplayer
@@ -130,33 +128,35 @@ static void aimBotThreadFunc()
 							angle.x = yaw;
 							angle.y = ptich;
 
+							//my shit attempt to clamp angles probs should make this a funtion
+							if (angle.x > 89.0f)
+							{
+								angle.x -= 180.f;
+							}
+							if (angle.x < -89.0f) 
+							{
+								angle.x += 180.f;
+							}
+							if (angle.y > 180.f) 
+							{
+								angle.y -= 360.f;
+							}
+							if (angle.y < -180.f)
+							{
+								angle.y += 360.f;
+							}
+
 						}
 
-						QAngle recoilAngles = localPlayer.getRecoilAngles();
-						angle.x = oldVAngles.x + (oldRecoilAngle.x - recoilAngles.x)*(rcsX/100.f);
-               			angle.y = oldVAngles.y + (oldRecoilAngle.y - recoilAngles.y)*(rcsY/100.f);
+						//QAngle recoilAngles = localPlayer.getRecoilAngles();
+						//angle.x = oldVAngles.x + (oldRecoilAngle.x - recoilAngles.x)*(rcsX/100.f);
+               			//angle.y = oldVAngles.y + (oldRecoilAngle.y - recoilAngles.y)*(rcsY/100.f);
 
-						//my shit attempt to clamp angles probs should make this a funtion
-						if (angle.x > 89.0f)
-						{
-							angle.x -= 180.f;
-						}
-						if (angle.x < -89.0f) 
-						{
-							angle.x += 180.f;
-						}
-						if (angle.y > 180.f) 
-						{
-							angle.y -= 360.f;
-						}
-						if (angle.y < -180.f)
-						{
-							angle.y += 360.f;
-						}
+						
 
 						//setting angles
 						localPlayer.setViewAngles(angle);
-						oldRecoilAngle = recoilAngles;
+						//oldRecoilAngle = recoilAngles;
 					}		
 				}
 			}
