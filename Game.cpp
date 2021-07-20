@@ -190,9 +190,13 @@ Vector Player::getPosition()
 
 QAngle Player::getViewAngles()
 {
-	QAngle angles;
-	apex.Read<QAngle>(ptr +OFFSET_VIEWANGLES,angles);
-	return angles;
+	QAngle temp;
+	SVector angles(0.f,0.f,0.f);
+	apex.Read<SVector>(ptr +OFFSET_VIEWANGLES,angles);
+	temp.x = angles.x;
+	temp.y = angles.y;
+	temp.z = angles.z;
+	return temp;
 }
 
 void Entity::setViewAngles(QAngle& angles)
