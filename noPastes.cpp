@@ -28,6 +28,8 @@ float maxDistance = 200.0f * 40.0f;
 bool rcs = true;
 float rcsX = 10.f;
 float rcsY = 25.f;
+float smoothing = 100.f;
+
 bool lookingForProcs = true; //read write - controls when cheat starts
 
 typedef struct player
@@ -103,10 +105,12 @@ static void aimBotThreadFunc()
 				Vector entPos = ent.getPosition();
 				Vector localPlayerPos = localPlayer.getCamPosition();
 				float distance = localPlayer.getPosition().DistTo(entPos);
-				printf("entpos.x: %F\n",entPos.x);
-				printf("playerpos.x: %F\n",localPlayerPos.x);
-				printf("dist: %F\n", distance);
-				printf("index: %d\n",i);
+
+				//printf("entpos.x: %F\n",entPos.x);
+				//printf("playerpos.x: %F\n",localPlayerPos.x);
+				//printf("dist: %F\n", distance);
+				//printf("index: %d\n",i);
+
 				if(true)
 				{
 					//view angle we are writing to player view angles
@@ -132,17 +136,19 @@ static void aimBotThreadFunc()
 
 							float ptich = (-(atan2(shit.z,c)))*(180/M_PI);
 
+							float diferenceYaw = yaw - oldVAngles.x;
+							float diferencePitch = ptich -oldVAngles.y;
+
+							angle.x += diferenceYaw / smoothing;
+							angle.y += diferencePitch / smoothing;
+
 							angle.x = ptich;
 							angle.y = yaw;
-							
-							printf("Pitch: %f\n", ptich);
-							printf("yaw: %f\n", yaw);
-
 
 							//my shit attempt to clamp angles probs should make this a funtion
 							if (angle.x > 89.0f)
 							{
-								angle.x -= 180.f;
+								angle.x = 88.8;
 							}
 							if (angle.x < -89.0f) 
 							{
