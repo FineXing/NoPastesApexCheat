@@ -235,3 +235,10 @@ QAngle Player::getRecoilAngles()
 	apex.Read<QAngle>(ptr + OFFSET_AIMPUNCH,angles);
 	return angles;
 }
+
+Vector Entity::getCamPosition()
+{
+	Vector pos;
+	apex.Read<Vector>(ptr + OFFSET_CAMERAPOS,pos);
+	return pos;
+}

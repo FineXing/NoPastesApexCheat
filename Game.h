@@ -15,6 +15,7 @@ public:
 	vec2 getViewAngles();
 	void setViewAngles(QAngle& angles);
 	void setViewAngles(SVector angles);
+	Vector getCamPosition();
 };
 
 class Player
