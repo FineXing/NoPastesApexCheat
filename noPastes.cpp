@@ -160,6 +160,10 @@ static void aimBotThreadFunc()
 						
 
 						//setting angles
+						if(angle.x == 0.f && angle.y == 0.f && angle.z == 0.f)
+						{
+							continue;
+						}
 						localPlayer.setViewAngles(angle);
 						//oldRecoilAngle = recoilAngles;
 					}		
