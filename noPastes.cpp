@@ -133,7 +133,7 @@ static void aimBotThreadFunc()
 
 							float yaw = (atan2(shit.y,shit.x))*(180/M_PI);
 
-							float ptich = (-(atan2(shit.z,c)))*(180/M_PI);
+							float ptich = ((atan2(shit.z,c)))*(180/M_PI);
 
 							float diferencePitch = ptich - oldVAngles.x;
 							float diferenceYaw = yaw - oldVAngles.y;
@@ -181,9 +181,9 @@ static void aimBotThreadFunc()
 							{
 								angle.y += 360.f;
 							}
-						//setting angles
-						/localPlayer.setViewAngles(angle);
-						oldRecoilAngle = recoilAngles;
+							//setting angles
+							localPlayer.setViewAngles(angle);
+							oldRecoilAngle = recoilAngles;
 					}
 						/*
 						if (true)
