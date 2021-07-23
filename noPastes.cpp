@@ -111,123 +111,67 @@ static void aimBotThreadFunc()
 				printf("dist: %F\n", distance);
 				//printf("index: %d\n",i);
 
-				if(true)
-				{
-					//view angle we are writing to player view angles
-					QAngle angle;
+				//view angle we are writing to player view angles
+				QAngle angle;
 
-					//getting original angles
-					QAngle oldVAngles = localPlayer.getViewAngles();
-					angle = oldVAngles;
-					printf("oldVAngles.x: %f oldVAngles.y: %f oldVAngles.z: %f",oldVAngles.x,oldVAngles.y,oldVAngles.z);
-					//recoil control system 
-					if (rcs)
-					{
-						if(true)
-						{
-							//shit = ent pos relitive to localplayer
-							Vector shit = entPos - localPlayerPos;
+				//getting original angles
+				QAngle oldVAngles = localPlayer.getViewAngles();
+				angle = oldVAngles;
+				printf("oldVAngles.x: %f oldVAngles.y: %f oldVAngles.z: %f",oldVAngles.x,oldVAngles.y,oldVAngles.z);
 
-							float c = sqrt(pow(shit.x,2) + pow(shit.y,2));
+				//shit = ent pos relitive to localplayer
+				Vector shit = entPos - localPlayerPos;
 
-							float yaw = (atan2(shit.y,shit.x))*(180/M_PI);
+				//find hypo. c = hypo
+				float c = sqrt(pow(shit.x,2) + pow(shit.y,2));
 
-							float ptich = ((atan2(shit.z,c)))*(180/M_PI);
+				float yaw = (atan2(shit.y,shit.x))*(180/M_PI);
+				float ptich = ((atan2(shit.z,c)))*(180/M_PI);
+				float diferencePitch = ptich - oldVAngles.x;
+				float diferenceYaw = yaw - oldVAngles.y;
 
-							float diferencePitch = ptich - oldVAngles.x;
-							float diferenceYaw = yaw - oldVAngles.y;
+				//float testYaw = getAngle(angle.y);
 
-							//float testYaw = getAngle(angle.y);
+				//if (testYaw >=0.f || testYaw <= 180.f)
+				//{
+				//	angle.y += diferenceYaw / smoothing;
+				//}
+				//else if(testYaw >= -0.f || testYaw <-180.f)
+				//{
+				//angle.y -= diferenceYaw / smoothing;
+				//}
+				//angle.x += diferencePitch / smoothing;
 
-							//if (testYaw >=0.f || testYaw <= 180.f)
-						///	{
-							//	angle.y += diferenceYaw / smoothing;
-							//}
-						//	else if(testYaw >= -0.f || testYaw <-180.f)
-						//	{
-							//	angle.y -= diferenceYaw / smoothing;
-							//}
-							
-
-							angle.x += diferencePitch / smoothing;
-
-
-							//angle.x = ptich;
-							//angle.y = yaw;
-
-							//my shit attempt to clamp angles probs should make this a funtion
-
-						}
-
-						QAngle recoilAngles = localPlayer.getRecoilAngles();
-						angle.x = oldVAngles.x + (oldRecoilAngle.x - recoilAngles.x)*(rcsX/100.f);
-               			angle.y = oldVAngles.y + (oldRecoilAngle.y - recoilAngles.y)*(rcsY/100.f);
-
-						
-							if (angle.x > 89.0f)
-							{
-								angle.x = 88.8;
-							}
-							if (angle.x < -89.0f) 
-							{
-								angle.x += 180.f;
-							}
-							if (angle.y > 180.f) 
-							{
-								angle.y -= 360.f;
-							}
-							if (angle.y < -180.f)
-							{
-								angle.y += 360.f;
-							}
-							//setting angles
-							localPlayer.setViewAngles(angle);
-							oldRecoilAngle = recoilAngles;
-					}
-						/*
-						if (true)
-						{		
-						uint64_t Input{ 0x1caa3f0 };
-
-						uint64_t m_pCommands;
-						apex.Read<uint64_t>(Input + 0xF8, m_pCommands);
-
-						int first_command_number;
-						apex.Read<int>(m_pCommands,first_command_number);
-				
-						int temp;
-						apex.Read<int>(m_pCommands,temp);
-						while (first_command_number == temp); //verifies that current usercmd is latest
-
-
-						int next_cmd_number;
-						apex.Read<int>((m_pCommands + 0x218) + 1, next_cmd_number ); //Grab next current usercmd (0x218 is size of UserCmd)
- 
-						while (true)
-						{
-							uint64_t current_command{ m_pCommands + 0x218 * (next_cmd_number % 750) };
-
-							bool doingShit = true;
-
-							while (doingShit)
-							{
-								int curCommandTemp;
-								apex.Read<int>(current_command,curCommandTemp);
-								if (next_cmd_number == curCommandTemp)
-								{
-									doingShit = false;
-								}
-							}
-
-								unsigned int old_command{ m_pCommands + 0x218 * ((next_cmd_number - 1) % 750) };
- 
-								apex.Write(old_command + 0x38, 1); //Write to buttons
-								apex.Write(old_command + 0xC, angle); //Write to viewangles
-								apex.Read<int>((current_command) + 1, next_cmd_number);
-						}
-						*/
+				angle.x = ptich;
+				angle.y = yaw;
 					
+
+				QAngle recoilAngles = localPlayer.getRecoilAngles();
+				angle.x = oldVAngles.x + (oldRecoilAngle.x - recoilAngles.x)*(rcsX/100.f);
+            	angle.y = oldVAngles.y + (oldRecoilAngle.y - recoilAngles.y)*(rcsY/100.f);
+
+				//my shit attempt to clamp angles probs should make this a funtion
+				if (angle.x > 89.0f)
+					{
+					angle.x = 88.8;
 				}
+				if (angle.x < -89.0f) 
+				{
+					angle.x += 180.f;
+				}
+				if (angle.y > 180.f) 
+				{
+					angle.y -= 360.f;
+				}
+				if (angle.y < -180.f)
+				{
+					angle.y += 360.f;
+				}
+				//setting angles
+				localPlayer.setViewAngles(angle);
+				oldRecoilAngle = recoilAngles;
+										
+				
 			}
 		}
 	}
