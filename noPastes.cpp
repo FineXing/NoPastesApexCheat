@@ -26,8 +26,8 @@ bool glowPlayersEnabled = false;
 bool aimbotEnabled = true;
 float maxDistance = 200.0f * 40.0f;
 bool rcs = true;
-float rcsX = 10.f;
-float rcsY = 25.f;
+float rcsX = 100.f;
+float rcsY = 100.f;
 float smoothing = 100.f;
 
 bool lookingForProcs = true; //read write - controls when cheat starts
@@ -123,9 +123,8 @@ static void aimBotThreadFunc()
 					//recoil control system 
 					if (rcs)
 					{
-						if(false)
+						if(true)
 						{
-							printf("hey");
 							//shit = ent pos relitive to localplayer
 							Vector shit = entPos - localPlayerPos;
 

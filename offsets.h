@@ -1,9 +1,6 @@
 //offsets found from CasualX's offset dumper and unknowncheats
 // https://github.com/CasualX/apexbot , https://www.unknowncheats.me/forum/apex-legends/319804-apex-legends-reversal-structs-offsets.html
-    #define OFFSET_ENTITYLIST			0x1911448
-    #define OFFSET_LOCAL_ENT			0x1cc0ce8 //LocalPlayer
-    #define OFFSET_NAME_LIST            0x8382450
-    #define OFFSET_THIRDPERSON          0x018f7970 + 0x6c //thirdperson_override + 0x6c
+
     #define OFFSET_ENTITYLIST			0x19126a8
     #define OFFSET_LOCAL_ENT			0x1cc1f48 //LocalPlayer
     #define OFFSET_NAME_LIST            0x83836d0
@@ -17,8 +14,10 @@
     #define OFFSET_ABS_VELOCITY         0x140 //m_vecAbsVelocity
     #define OFFSET_VISIBLE_TIME         0x1ACC
     #define OFFSET_ZOOMING      		0x1be1 //m_bZooming
+
     #define OFFSET_LIFE_STATE			0x798  //m_lifeState, >0 = dead
     #define OFFSET_BLEED_OUT_STATE		0x26c8 //m_bleedoutState, >0 = knocked
+
     #define OFFSET_ORIGIN				0x14c //m_vecAbsOrigin
     #define OFFSET_BONES				0xF38 //m_bConstrainBetweenEndpoints
     #define OFFSET_AIMPUNCH				0x2430 //m_currentFrameLocalPlayer.m_vecPunchWeapon_Angle
@@ -29,15 +28,15 @@
     #define OFFSET_OBSERVING_TARGET		0x3350 //m_hObserverTarget
 
     #define OFFSET_MATRIX				0x1b3bd0
-    #define OFFSET_RENDER				0x41e3588
     #define OFFSET_RENDER				0x41e4808
 
     #define OFFSET_WEAPON				0x1a6c //m_latestPrimaryWeapons
     #define OFFSET_BULLET_SPEED         0x1ED0
     #define OFFSET_BULLET_SCALE         0x1ED8
-    
     #define OFFSET_ZOOM_FOV             0x16f8 + 0xb8 //m_playerData + m_curZoomFOV
+
     #define OFFSET_ITEM_GLOW            0x2c0 //m_highlightFunctionBits
+
     #define OFFSET_GLOW_T1              0x262 //16256 = enabled, 0 = disabled 
     #define OFFSET_GLOW_T2              0x2dc //1193322764 = enabled, 0 = disabled 
     #define OFFSET_GLOW_ENABLE          0x3c8 //7 = enabled, 2 = disabled
