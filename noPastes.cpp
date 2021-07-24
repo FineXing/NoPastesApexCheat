@@ -110,18 +110,16 @@ static void aimBotThreadFunc()
 				//printf("playerpos.x: %F\n",localPlayerPos.x);
 				printf("dist: %F\n", distance);
 				//printf("index: %d\n",i);
-				if (distance <=maxDistance)
+				//view angle we are writing to player view angles
+				QAngle angle;
+
+				//getting original angles
+				QAngle oldVAngles = localPlayer.getViewAngles();
+				angle = oldVAngles;
+				printf("oldVAngles.x: %f oldVAngles.y: %f oldVAngles.z: %f", oldVAngles.x,oldVAngles.y,oldVAngles.z);
+
+				if (distance <100.f)
 				{
-					//view angle we are writing to player view angles
-					QAngle angle;
-
-					//getting original angles
-					QAngle oldVAngles = localPlayer.getViewAngles();
-					angle = oldVAngles;
-					printf("oldVAngles.x: %f oldVAngles.y: %f oldVAngles.z: %f", oldVAngles.x,oldVAngles.y,oldVAngles.z);
-				
-
-				
 					//shit = ent pos relitive to localplayer
 					Vector shit = entPos - localPlayerPos;
 
@@ -139,28 +137,30 @@ static void aimBotThreadFunc()
 
 					if (testYaw >=0.f || testYaw <= 180.f)
 					{
-					angle.y += diferenceYaw / smoothing;
-						}
-						else if(testYaw >= -0.f || testYaw <-180.f)
+						angle.y += diferenceYaw / smoothing;
+					}
+					else if(testYaw >= -0.f || testYaw <-180.f)
 					{
-					angle.y -= diferenceYaw / smoothing;
+						angle.y -= diferenceYaw / smoothing;
 					}
 
 					angle.x += diferencePitch / smoothing;
 
 					//angle.x = ptich;
 			   	 	//angle.y = yaw;
-
+				}
+				if(rcs)
+				{
 					QAngle recoilAngles = localPlayer.getRecoilAngles();
 					angle.x = angle.x + (oldRecoilAngle.x - recoilAngles.x)*(rcsX/100.f);
             		angle.y = angle.y + (oldRecoilAngle.y - recoilAngles.y)*(rcsY/100.f);
-				
-					angle = clampAngles(angle);
+				}
+				angle = clampAngles(angle);
 
-					//setting angles
-					localPlayer.setViewAngles(angle);
-					oldRecoilAngle = recoilAngles;
-				}					
+				//setting angles
+				localPlayer.setViewAngles(angle);
+				oldRecoilAngle = recoilAngles;
+				
 				
 			}
 		}
