@@ -130,17 +130,17 @@ static void aimBotThreadFunc()
 				float diferencePitch = ptich - oldVAngles.x;
 				float diferenceYaw = yaw - oldVAngles.y;
 
-				//float testYaw = getAngle(angle.y);
+				float testYaw = getAngle(angle.y);
 
-				//if (testYaw >=0.f || testYaw <= 180.f)
-				//{
-				//	angle.y += diferenceYaw / smoothing;
-				//}
-				//else if(testYaw >= -0.f || testYaw <-180.f)
-				//{
-				//angle.y -= diferenceYaw / smoothing;
-				//}
-				//angle.x += diferencePitch / smoothing;
+				if (testYaw >=0.f || testYaw <= 180.f)
+				{
+					angle.y += diferenceYaw / smoothing;
+				}
+				else if(testYaw >= -0.f || testYaw <-180.f)
+				{
+				angle.y -= diferenceYaw / smoothing;
+				}
+				angle.x += diferencePitch / smoothing;
 
 				angle.x = ptich;
 				angle.y = yaw;
