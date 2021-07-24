@@ -116,6 +116,10 @@ static void aimBotThreadFunc()
 				//getting original angles
 				QAngle oldVAngles = localPlayer.getViewAngles();
 				angle = oldVAngles;
+				if(rcs)
+				{
+					QAngle recoilAngles = localPlayer.getRecoilAngles();
+				}
 				printf("oldVAngles.x: %f oldVAngles.y: %f oldVAngles.z: %f", oldVAngles.x,oldVAngles.y,oldVAngles.z);
 
 				if (distance <100.f)
@@ -151,7 +155,7 @@ static void aimBotThreadFunc()
 				}
 				if(rcs)
 				{
-					QAngle recoilAngles = localPlayer.getRecoilAngles();
+
 					angle.x = angle.x + (oldRecoilAngle.x - recoilAngles.x)*(rcsX/100.f);
             		angle.y = angle.y + (oldRecoilAngle.y - recoilAngles.y)*(rcsY/100.f);
 				}
