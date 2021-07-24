@@ -110,67 +110,57 @@ static void aimBotThreadFunc()
 				//printf("playerpos.x: %F\n",localPlayerPos.x);
 				printf("dist: %F\n", distance);
 				//printf("index: %d\n",i);
-
-				//view angle we are writing to player view angles
-				QAngle angle;
-
-				//getting original angles
-				QAngle oldVAngles = localPlayer.getViewAngles();
-				angle = oldVAngles;
-				printf("oldVAngles.x: %f oldVAngles.y: %f oldVAngles.z: %f",oldVAngles.x,oldVAngles.y,oldVAngles.z);
-
-				//shit = ent pos relitive to localplayer
-				Vector shit = entPos - localPlayerPos;
-
-				//find hypo. c = hypo
-				float c = sqrt(pow(shit.x,2) + pow(shit.y,2));
-
-				float yaw = (atan2(shit.y,shit.x))*(180/M_PI);
-				float ptich = ((atan2(shit.z,c)))*(180/M_PI);
-				float diferencePitch = ptich - oldVAngles.x;
-				float diferenceYaw = yaw - oldVAngles.y;
-
-				float testYaw = getAngle(angle.y);
-
-				if (testYaw >=0.f || testYaw <= 180.f)
+				if (distance <=maxDistance)
 				{
-					angle.y += diferenceYaw / smoothing;
-				}
-				else if(testYaw >= -0.f || testYaw <-180.f)
-				{
-				angle.y -= diferenceYaw / smoothing;
-				}
-				angle.x += diferencePitch / smoothing;
+					//view angle we are writing to player view angles
+					QAngle angle;
 
-				//angle.x = ptich;
-			    //angle.y = yaw;
-					
+					//getting original angles
+					QAngle oldVAngles = localPlayer.getViewAngles();
+					angle = oldVAngles;
+					printf("oldVAngles.x: %f oldVAngles.y: %f oldVAngles.z: %f",oldVAngles.x,oldVAngles.y,oldVAngles.z);
+				
+					QAngle recoilAngles = localPlayer.getRecoilAngles();
+					angle.x = angle.x + (oldRecoilAngle.x - recoilAngles.x)*(rcsX/100.f);
+            		angle.y = angle.y + (oldRecoilAngle.y - recoilAngles.y)*(rcsY/100.f);
+				
+					//shit = ent pos relitive to localplayer
+					Vector shit = entPos - localPlayerPos;
 
-				QAngle recoilAngles = localPlayer.getRecoilAngles();
-				angle.x = oldVAngles.x + (oldRecoilAngle.x - recoilAngles.x)*(rcsX/100.f);
-            	angle.y = oldVAngles.y + (oldRecoilAngle.y - recoilAngles.y)*(rcsY/100.f);
+					//find hypo. c = hypo
+					float c = sqrt(pow(shit.x,2) + pow(shit.y,2));
 
-				//my shit attempt to clamp angles probs should make this a funtion
-				if (angle.x > 89.0f)
+					float yaw = (atan2(shit.y,shit.x))*(180/M_PI);
+
+					float ptich = (-(atan2(shit.z,c)))*(180/M_PI);
+
+					float diferencePitch = ptich - oldVAngles.x;
+					float diferenceYaw = yaw - oldVAngles.y;
+
+					float testYaw = getAngle(angle.y);
+
+					if (testYaw >=0.f || testYaw <= 180.f)
 					{
-					angle.x = 88.8;
-				}
-				if (angle.x < -89.0f) 
-				{
-					angle.x += 180.f;
-				}
-				if (angle.y > 180.f) 
-				{
-					angle.y -= 360.f;
-				}
-				if (angle.y < -180.f)
-				{
-					angle.y += 360.f;
-				}
-				//setting angles
-				localPlayer.setViewAngles(angle);
-				oldRecoilAngle = recoilAngles;
-										
+					angle.y += diferenceYaw / smoothing;
+						}
+						else if(testYaw >= -0.f || testYaw <-180.f)
+					{
+					angle.y -= diferenceYaw / smoothing;
+					}
+
+					angle.x += diferencePitch / smoothing;
+
+					//angle.x = ptich;
+			   	 //angle.y = yaw;
+
+
+				
+					angle = clampAngles(angle);
+
+					//setting angles
+					localPlayer.setViewAngles(angle);
+					oldRecoilAngle = recoilAngles;
+				}					
 				
 			}
 		}

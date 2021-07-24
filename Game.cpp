@@ -258,3 +258,25 @@ float getAngle(float angle)
 		return angle + 180.f;
 	}
 }
+
+QAngle clampAngles(QAngle angle)
+{
+	//my shit attempt to clamp angles probs should make this a funtion
+	if (angle.x > 89.0f)
+	{
+		angle.x = 88.8;
+	}
+	if (angle.x < -89.0f) 
+	{
+		angle.x += 180.f;
+	}
+	if (angle.y > 180.f) 
+	{
+		angle.y -= 360.f;
+	}
+	if (angle.y < -180.f)
+	{
+		angle.y += 360.f;
+	}
+	return angle;
+}

@@ -51,6 +51,8 @@ struct GlowMode
 };
 
 
+QAngle clampAngles(QAngle angle);
+
 float getAngle(float angle);
 
 uintptr_t getBestEnemey();
