@@ -142,8 +142,8 @@ static void aimBotThreadFunc()
 				}
 				angle.x += diferencePitch / smoothing;
 
-				angle.x = ptich;
-				angle.y = yaw;
+				//angle.x = ptich;
+			    //angle.y = yaw;
 					
 
 				QAngle recoilAngles = localPlayer.getRecoilAngles();
