@@ -21,8 +21,8 @@ uint64_t clientBase; // client base addr
 
 bool v1 = false;
 
-bool glowItemsEnabled = false;
-bool glowPlayersEnabled = false;
+bool glowItemsEnabled = true;
+bool glowPlayersEnabled = true;
 bool aimbotEnabled = true;
 float maxDistance = 200.0f * 40.0f;
 bool rcs = true;
@@ -99,7 +99,7 @@ static void aimBotThreadFunc()
 				//checks if ent is dummy 
 				if (!ent.isDummy())
 				{
-					continue;
+					
 				}
 
 				Vector entPos = ent.getPosition();
@@ -122,7 +122,7 @@ static void aimBotThreadFunc()
 				}
 				printf("oldVAngles.x: %f oldVAngles.y: %f oldVAngles.z: %f", oldVAngles.x,oldVAngles.y,oldVAngles.z);
 
-				if (distance <100.f)
+				if (false)
 				{
 					//shit = ent pos relitive to localplayer
 					Vector shit = entPos - localPlayerPos;
