@@ -118,11 +118,9 @@ static void aimBotThreadFunc()
 					//getting original angles
 					QAngle oldVAngles = localPlayer.getViewAngles();
 					angle = oldVAngles;
-					printf("oldVAngles.x: %f oldVAngles.y: %f oldVAngles.z: %f",oldVAngles.x,oldVAngles.y,oldVAngles.z);
+					printf("oldVAngles.x: %f oldVAngles.y: %f oldVAngles.z: %f", oldVAngles.x,oldVAngles.y,oldVAngles.z);
 				
-					QAngle recoilAngles = localPlayer.getRecoilAngles();
-					angle.x = angle.x + (oldRecoilAngle.x - recoilAngles.x)*(rcsX/100.f);
-            		angle.y = angle.y + (oldRecoilAngle.y - recoilAngles.y)*(rcsY/100.f);
+
 				
 					//shit = ent pos relitive to localplayer
 					Vector shit = entPos - localPlayerPos;
@@ -151,9 +149,11 @@ static void aimBotThreadFunc()
 					angle.x += diferencePitch / smoothing;
 
 					//angle.x = ptich;
-			   	 //angle.y = yaw;
+			   	 	//angle.y = yaw;
 
-
+					QAngle recoilAngles = localPlayer.getRecoilAngles();
+					angle.x = angle.x + (oldRecoilAngle.x - recoilAngles.x)*(rcsX/100.f);
+            		angle.y = angle.y + (oldRecoilAngle.y - recoilAngles.y)*(rcsY/100.f);
 				
 					angle = clampAngles(angle);
 
