@@ -109,7 +109,7 @@ static void aimBotThreadFunc()
 				//checks if ent is dummy 
 				if (!ent.isDummy())
 				{
-					
+					continue;
 				}
 
 				Vector entPos = ent.getPosition();
@@ -217,24 +217,24 @@ static void aimBotThreadFunc()
 			float diferencePitch = ptich - oldVAngles.x;
 			float diferenceYaw = yaw - oldVAngles.y;
 			float delta  = sqrt(pow(diferenceYaw,2) + pow(diferencePitch,2));
-			
+
 			//unnessasary given the next check but its still here
-			if(delta > maxDelta)
+			if(c > maxDelta)
 			{
 				continue;
 			}
-			if(delta<bestTargetDelta)
+			if(c<bestTargetDelta)
 			{
-				printf("target found. delta = %F\n",delta);
+				printf("target found. delta = %F\n",c);
 				bestTarget = ent;
-				bestTargetDelta = delta;
+				bestTargetDelta = c;
 			}
 		}
 
 		if(bestTarget.ptr != 0)
 		{
 			QAngle angles = localPlayer.getViewAngles();
-			angles =angles + calcAngles(localPlayer, bestTarget);
+			angles = angles + calcAngles(localPlayer, bestTarget);
 
 			if (angles.x == 0.f && angles.y == 0.f && angles.z ==0.f)
 			{
