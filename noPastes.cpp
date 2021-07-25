@@ -25,7 +25,7 @@ bool glowItemsEnabled = true;
 bool glowPlayersEnabled = true;
 bool aimbotEnabled = true;
 float maxDistance = 200.0f * 40.0f;
-float maxDelta = 25.f;
+float maxDelta = 100.f;
 bool rcs = true;
 float rcsX = 100.f;
 float rcsY = 100.f;
@@ -218,21 +218,22 @@ static void aimBotThreadFunc()
 				bestTargetDelta = c;
 			}
 		}
+
 		if(bestTarget.ptr != 0)
 		{
-		QAngle angles = localPlayer.getViewAngles();
-		angles =angles + calcAngles(localPlayer, bestTarget);
+			QAngle angles = localPlayer.getViewAngles();
+			angles =angles + calcAngles(localPlayer, bestTarget);
 
-		if (angles.x == 0.f && angles.y == 0.f && angles.z ==0.f)
-		{
-			continue;
-		}
-		else
-		{
-			printf("oldVAngles.x: %f oldVAngles.y: %f oldVAngles.z: %f", angles.x, angles.y,angles.z);
-			angles = clampAngles(angles);
-			localPlayer.setViewAngles(angles);
-		}
+			if (angles.x == 0.f && angles.y == 0.f && angles.z ==0.f)
+			{
+				continue;
+			}
+			else
+			{
+				printf("oldVAngles.x: %f oldVAngles.y: %f oldVAngles.z: %f", angles.x, angles.y,angles.z);
+				angles = clampAngles(angles);
+				localPlayer.setViewAngles(angles);
+			}
 		}
 	}	
 }
