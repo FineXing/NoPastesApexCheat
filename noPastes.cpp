@@ -181,7 +181,7 @@ static void aimBotThreadFunc()
 		}
 	}
 	
-	while (lookingForProcs && v1 == false)
+	while (lookingForProcs == false && v1 == false)
 	{
 		uint64_t localPlayerPtr = 0;
 		apex.Read<uint64_t>(apexBase + OFFSET_LOCAL_ENT, localPlayerPtr);
@@ -217,8 +217,13 @@ static void aimBotThreadFunc()
 				bestTargetDelta = c;
 			}
 		}
-		QAngle angles = calcAngles(localPlayer,bestTarget);
+		QAngle angles = calcAngles(localPlayer, bestTarget);
 
+		if (angles.x == 0.f && angles.y == 0.f)
+		{
+			continue;
+		}
+		
 		angles = clampAngles(angles);
 		localPlayer.setViewAngles(angles);
 	}	
