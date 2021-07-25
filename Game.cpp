@@ -305,13 +305,13 @@ QAngle calcAngles(Player player, Entity target)
 	{
 	angle.y += diferenceYaw / smoothing;
 	}
-	else if(testYaw >= -0.f || testYaw <-180.f)
+	else if(testYaw >= -0.f || testYaw <= -180.f)
 	{
 	angle.y -= diferenceYaw / smoothing;
 	}
 
 
-	angle.y += diferenceYaw/smoothing;
+	//angle.y += diferenceYaw/smoothing;
 	angle.x += diferencePitch / smoothing;
 
 	return angle;
