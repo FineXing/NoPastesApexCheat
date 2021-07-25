@@ -25,6 +25,7 @@ bool glowItemsEnabled = true;
 bool glowPlayersEnabled = true;
 bool aimbotEnabled = true;
 float maxDistance = 200.0f * 40.0f;
+float maxDelta = 25.f;
 bool rcs = true;
 float rcsX = 100.f;
 float rcsY = 100.f;
@@ -66,6 +67,13 @@ static void updatePlayerList()
 }
 
 
+//--------------------------Things To Do--------------------------
+//1.)find delta for all posible ents and set angles for best delta
+//2.)move set viewangle func out of for loop
+//3.)set a delta cap
+//4.)add vis check
+//5.)add distance check
+//6.)debug than add player check than debug again
 static void aimBotThreadFunc()
 {
 	printf("Started Aimbot Thread\n");
@@ -74,7 +82,7 @@ static void aimBotThreadFunc()
 	oldRecoilAngle.x = 0.f;
 	oldRecoilAngle.y= 0.f;
 	oldRecoilAngle.z =0.f;
-	while (lookingForProcs ==false)
+	while (lookingForProcs ==false && v1 == true)
 	{
 		while (aimbotEnabled)
 		{
@@ -84,6 +92,8 @@ static void aimBotThreadFunc()
 			apex.Read<uint64_t>(apexBase + OFFSET_LOCAL_ENT, localPlayerPtr);
 			uint64_t entityList = apexBase + OFFSET_ENTITYLIST;
 			if (localPlayerPtr == 0) continue;
+
+
 
 			//loop though all ents
 			for (int i = 0; i < 10000; i++)
@@ -116,10 +126,9 @@ static void aimBotThreadFunc()
 				//getting original angles
 				QAngle oldVAngles = localPlayer.getViewAngles();
 				angle = oldVAngles;
-				if(rcs)
-				{
-					QAngle recoilAngles = localPlayer.getRecoilAngles();
-				}
+
+				QAngle recoilAngles = localPlayer.getRecoilAngles();
+
 				printf("oldVAngles.x: %f oldVAngles.y: %f oldVAngles.z: %f", oldVAngles.x,oldVAngles.y,oldVAngles.z);
 
 				if (false)
@@ -128,18 +137,18 @@ static void aimBotThreadFunc()
 					Vector shit = entPos - localPlayerPos;
 
 					//find hypo. c = hypo
-					float c = sqrt(pow(shit.x,2) + pow(shit.y,2));
+					float c = sqrt(pow(shit.x, 2) + pow(shit.y, 2));
 
-					float yaw = (atan2(shit.y,shit.x))*(180/M_PI);
+					float yaw = (atan2(shit.y, shit.x))*(180/M_PI);
 
-					float ptich = (-(atan2(shit.z,c)))*(180/M_PI);
+					float ptich = (-(atan2(shit.z, c)))*(180/M_PI);
 
 					float diferencePitch = ptich - oldVAngles.x;
 					float diferenceYaw = yaw - oldVAngles.y;
 
 					float testYaw = getAngle(angle.y);
 
-					if (testYaw >=0.f || testYaw <= 180.f)
+					if (testYaw >= 0.f || testYaw <= 180.f)
 					{
 						angle.y += diferenceYaw / smoothing;
 					}
@@ -165,10 +174,51 @@ static void aimBotThreadFunc()
 				localPlayer.setViewAngles(angle);
 				oldRecoilAngle = recoilAngles;
 				
+
+
 				
 			}
 		}
 	}
+	
+	while (lookingForProcs && v1 == false)
+	{
+		uint64_t localPlayerPtr = 0;
+		apex.Read<uint64_t>(apexBase + OFFSET_LOCAL_ENT, localPlayerPtr);
+		uint64_t entityList = apexBase + OFFSET_ENTITYLIST;
+		if (localPlayerPtr == 0) continue;
+
+		Player localPlayer = ptrToPlayer(localPlayerPtr);
+
+		Entity bestTarget;
+		float bestTargetDelta = maxDelta;
+		for(int i = 0; i < 10000; i++)
+		{
+			uint64_t entPtr = 0;
+			apex.Read<uint64_t>(entityList + ((uint64_t)i << 5), entPtr);
+			Entity ent = ptrToEntity(entPtr);
+
+			if(!ent.isDummy())continue;
+
+			Vector localPlayerPos = localPlayer.getCamPosition();
+			Vector entPos = ent.getPosition();
+			float distance = localPlayer.getPosition().DistTo(entPos);
+			
+			Vector shit = localPlayerPos - entPos;
+
+			float c = sqrt(pow(shit.x, 2) + pow(shit.y, 2));
+
+			//unnessasary given the next check but its still here
+			if(c > maxDelta)continue;
+
+			if(c<bestTargetDelta)
+			{
+				bestTarget = ent;
+				bestTargetDelta = c;
+			}
+		}
+		QAngle angles = calcAngles(localPlayer,bestTarget);
+	}	
 }
 
 static void playerGlowThread()

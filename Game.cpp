@@ -5,6 +5,7 @@
 
 extern Memory apex;
 extern uint64_t apexBase;
+extern float smoothing;
 
 bool Entity::isPlayer()
 {
@@ -278,5 +279,38 @@ QAngle clampAngles(QAngle angle)
 	{
 		angle.y += 360.f;
 	}
+	return angle;
+}
+
+QAngle calcAngles(Player player, Entity target)
+{
+	QAngle angle = QAngle();
+	QAngle oldVAngles = player.getViewAngles();
+	Vector shit = 	player.getCamPosition() - target.getPosition();
+
+	
+	//find hypo. c = hypo
+	float c = sqrt(pow(shit.x, 2) + pow(shit.y, 2));
+
+	float yaw = (atan2(shit.y, shit.x))*(180/M_PI);
+
+	float ptich = (-(atan2(shit.z, c)))*(180/M_PI);
+
+	float diferencePitch = ptich - oldVAngles.x;
+	float diferenceYaw = yaw - oldVAngles.y;
+
+	float testYaw = getAngle(angle.y);
+
+	if (testYaw >= 0.f || testYaw <= 180.f)
+	{
+		angle.y += diferenceYaw / smoothing;
+	}
+	else if(testYaw >= -0.f || testYaw <-180.f)
+	{
+		angle.y -= diferenceYaw / smoothing;
+	}
+
+	angle.x += diferencePitch / smoothing;
+
 	return angle;
 }

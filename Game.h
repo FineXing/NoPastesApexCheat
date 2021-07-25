@@ -52,7 +52,7 @@ struct GlowMode
 
 
 QAngle clampAngles(QAngle angle);
-
+QAngle calcAngles(Player player, Entity target);
 float getAngle(float angle);
 
 uintptr_t getBestEnemey();
