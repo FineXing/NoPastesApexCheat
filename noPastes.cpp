@@ -25,7 +25,7 @@ bool glowItemsEnabled = true;
 bool glowPlayersEnabled = true;
 bool aimbotEnabled = true;
 float maxDistance = 200.0f * 40.0f;
-float maxDelta = 100.f;
+float maxDelta = 80.f;
 bool rcs = true;
 float rcsX = 100.f;
 float rcsY = 100.f;
@@ -206,16 +206,21 @@ static void aimBotThreadFunc()
 
 			float c = sqrt(pow(shit.x, 2) + pow(shit.y, 2));
 
+			float yaw = (atan2(shit.y, shit.x))*(180/M_PI);
+
+			float ptich = (-(atan2(shit.z, c)))*(180/M_PI);
+
+			float delta  = sqrt(pow(yaw,2), pow(ptich,2));
 			//unnessasary given the next check but its still here
-			if(c > maxDelta)
+			if(delta > maxDelta)
 			{
 				continue;
 			}
-			if(c<bestTargetDelta)
+			if(delta<bestTargetDelta)
 			{
 				printf("target found. delta = %F\n",c);
 				bestTarget = ent;
-				bestTargetDelta = c;
+				bestTargetDelta = delta;
 			}
 		}
 

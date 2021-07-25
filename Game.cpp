@@ -260,9 +260,10 @@ float getAngle(float angle)
 	}
 }
 
+//my shit attempt to clamp angles
 QAngle clampAngles(QAngle angle)
 {
-	//my shit attempt to clamp angles probs should make this a funtion
+	
 	if (angle.x > 89.0f)
 	{
 		angle.x = 88.8;
@@ -299,20 +300,22 @@ QAngle calcAngles(Player player, Entity target)
 	float diferencePitch = ptich - oldVAngles.x;
 	float diferenceYaw = yaw - oldVAngles.y;
 
-	float testYaw = getAngle(angle.y);
+	//float testYaw = getAngle(angle.y);
 
-	if (testYaw >= 0.f || testYaw <= 180.f)
-	{
-	angle.y += diferenceYaw / smoothing;
-	}
-	else if(testYaw >= -0.f || testYaw <= -180.f)
-	{
-	angle.y -= diferenceYaw / smoothing;
-	}
+	//if (diferenceYaw >= 0.f || diferenceYaw <= 180.f)
+	//{
+	//	angle.y -= diferenceYaw / smoothing;
+	//}
+	//else if(diferenceYaw >= -0.f || diferenceYaw <= -180.f)
+	//{
+	//	angle.y += diferenceYaw / smoothing;
+	//}
+	
+	
+	
 
-
-	//angle.y += diferenceYaw/smoothing;
+	angle.y += diferenceYaw/smoothing;
 	angle.x += diferencePitch / smoothing;
-
+	angle.z = 0.f;
 	return angle;
 }
