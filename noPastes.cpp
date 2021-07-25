@@ -203,10 +203,9 @@ static void aimBotThreadFunc()
 			Vector localPlayerPos = localPlayer.getCamPosition();
 			Vector entPos = ent.getPosition();
 			float distance = localPlayer.getPosition().DistTo(entPos);
-			printf("dist: %F\n",distance);
 
 
-			Vector shit = localPlayerPos - entPos;
+			Vector shit = entPos - localPlayerPos ;
 
 			float c = sqrt(pow(shit.x, 2) + pow(shit.y, 2));
 
@@ -215,23 +214,23 @@ static void aimBotThreadFunc()
 
 			if(c<bestTargetDelta)
 			{
+				printf("target found. delta = %F\n",c);
 				bestTarget = ent;
 				bestTargetDelta = c;
 			}
 		}
-		QAngle angles;
-		angles.x = 0.f;
-		angles.y = 0.f;
-		angles.z = 0.f;
+		QAngle angles = localPlayer.getViewAngles();
 		angles = calcAngles(localPlayer, bestTarget);
 
-		if (angles.x != 0.f && angles.y != 0.f)
+		if (angles.x == 0.f && angles.y == 0.f)
 		{
-			continue;
+			
 		}
-		
-		angles = clampAngles(angles);
-		localPlayer.setViewAngles(angles);
+		else
+		{
+			angles = clampAngles(angles);
+			localPlayer.setViewAngles(angles);
+		}
 	}	
 }
 
