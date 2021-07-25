@@ -172,11 +172,7 @@ static void aimBotThreadFunc()
 
 				//setting angles
 				localPlayer.setViewAngles(angle);
-				oldRecoilAngle = recoilAngles;
-				
-
-
-				
+				oldRecoilAngle = recoilAngles;	
 			}
 		}
 	}
@@ -222,12 +218,13 @@ static void aimBotThreadFunc()
 		QAngle angles = localPlayer.getViewAngles();
 		angles = calcAngles(localPlayer, bestTarget);
 
-		if (angles.x == 0.f && angles.y == 0.f)
+		if (angles.x == 0.f && angles.y == 0.f && angles.z ==0.f)
 		{
-			
+
 		}
 		else
 		{
+			printf("oldVAngles.x: %f oldVAngles.y: %f oldVAngles.z: %f", angles.x, angles.y,angles.z);
 			angles = clampAngles(angles);
 			localPlayer.setViewAngles(angles);
 		}
