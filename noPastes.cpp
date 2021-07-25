@@ -218,6 +218,9 @@ static void aimBotThreadFunc()
 			}
 		}
 		QAngle angles = calcAngles(localPlayer,bestTarget);
+
+		angles = clampAngles(angles);
+		localPlayer.setViewAngles(angles);
 	}	
 }
 
