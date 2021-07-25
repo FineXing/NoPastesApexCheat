@@ -187,6 +187,7 @@ static void aimBotThreadFunc()
 		Player localPlayer = ptrToPlayer(localPlayerPtr);
 
 		Entity bestTarget;
+		bestTarget.ptr = 0;
 		float bestTargetDelta = maxDelta;
 		for(int i = 0; i < 10000; i++)
 		{
@@ -206,8 +207,10 @@ static void aimBotThreadFunc()
 			float c = sqrt(pow(shit.x, 2) + pow(shit.y, 2));
 
 			//unnessasary given the next check but its still here
-			if(c > maxDelta)continue;
-
+			if(c > maxDelta)
+			{
+				continue;
+			}
 			if(c<bestTargetDelta)
 			{
 				printf("target found. delta = %F\n",c);
@@ -215,18 +218,21 @@ static void aimBotThreadFunc()
 				bestTargetDelta = c;
 			}
 		}
+		if(bestTarget.ptr != 0)
+		{
 		QAngle angles = localPlayer.getViewAngles();
-		angles = calcAngles(localPlayer, bestTarget);
+		angles =angles + calcAngles(localPlayer, bestTarget);
 
 		if (angles.x == 0.f && angles.y == 0.f && angles.z ==0.f)
 		{
-
+			continue;
 		}
 		else
 		{
 			printf("oldVAngles.x: %f oldVAngles.y: %f oldVAngles.z: %f", angles.x, angles.y,angles.z);
 			angles = clampAngles(angles);
 			localPlayer.setViewAngles(angles);
+		}
 		}
 	}	
 }
