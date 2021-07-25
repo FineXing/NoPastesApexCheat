@@ -203,7 +203,9 @@ static void aimBotThreadFunc()
 			Vector localPlayerPos = localPlayer.getCamPosition();
 			Vector entPos = ent.getPosition();
 			float distance = localPlayer.getPosition().DistTo(entPos);
-			
+			printf("dist: %F\n",distance);
+
+
 			Vector shit = localPlayerPos - entPos;
 
 			float c = sqrt(pow(shit.x, 2) + pow(shit.y, 2));
