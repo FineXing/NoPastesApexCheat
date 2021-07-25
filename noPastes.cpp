@@ -219,9 +219,13 @@ static void aimBotThreadFunc()
 				bestTargetDelta = c;
 			}
 		}
-		QAngle angles = calcAngles(localPlayer, bestTarget);
+		QAngle angles;
+		angles.x = 0.f;
+		angles.y = 0.f;
+		angles.z = 0.f;
+		angles = calcAngles(localPlayer, bestTarget);
 
-		if (angles.x == 0.f && angles.y == 0.f)
+		if (angles.x != 0.f && angles.y != 0.f)
 		{
 			continue;
 		}
