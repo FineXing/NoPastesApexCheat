@@ -191,6 +191,7 @@ static void aimBotThreadFunc()
 		float bestTargetDelta = maxDelta;
 		for(int i = 0; i < 10000; i++)
 		{
+			
 			uint64_t entPtr = 0;
 			apex.Read<uint64_t>(entityList + ((uint64_t)i << 5), entPtr);
 			Entity ent = ptrToEntity(entPtr);
@@ -203,14 +204,20 @@ static void aimBotThreadFunc()
 
 
 			Vector shit = entPos - localPlayerPos ;
-
+			
+			QAngle oldVAngles = localPlayer.getViewAngles();
 			float c = sqrt(pow(shit.x, 2) + pow(shit.y, 2));
 
 			float yaw = (atan2(shit.y, shit.x))*(180/M_PI);
 
 			float ptich = (-(atan2(shit.z, c)))*(180/M_PI);
 
-			float delta  = sqrt(pow(yaw,2), pow(ptich,2));
+
+
+			float diferencePitch = ptich - oldVAngles.x;
+			float diferenceYaw = yaw - oldVAngles.y;
+			float delta  = sqrt(pow(diferenceYaw,2) + pow(diferencePitch,2));
+			
 			//unnessasary given the next check but its still here
 			if(delta > maxDelta)
 			{
@@ -218,7 +225,7 @@ static void aimBotThreadFunc()
 			}
 			if(delta<bestTargetDelta)
 			{
-				printf("target found. delta = %F\n",c);
+				printf("target found. delta = %F\n",delta);
 				bestTarget = ent;
 				bestTargetDelta = delta;
 			}
