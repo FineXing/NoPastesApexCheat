@@ -29,20 +29,13 @@ float maxDelta = 80.f;
 bool rcs = true;
 float rcsX = 100.f;
 float rcsY = 100.f;
-float smoothing = 0.4;
+float smoothing = 100.f;
 
 bool lookingForProcs = true; //read write - controls when cheat starts
 
-typedef struct player
-{
-	uint64_t playerPtr;
-	float locX;
-	float locY;
-	float locZ;
-	int team = 0;
 
-}player;
 
+Player playerList[100];
 
 //UNUSED UNTESTED AS OF RN
 static void updatePlayerList()
@@ -52,18 +45,29 @@ static void updatePlayerList()
 	{
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
-		for(int i = 0; i<=100;i++)
+		for(int i = 0; i<100;i++)
 		{
-			uint64_t localPlayer = 0;
-			apex.Read<uint64_t>(apexBase + OFFSET_LOCAL_ENT, localPlayer);
+			uint64_t localPlayerPtr = 0;
+			apex.Read<uint64_t>(apexBase + OFFSET_LOCAL_ENT, localPlayerPtr);
+			if(localPlayerPtr == 0)continue;
+			Player localPlayer = ptrToPlayer(localPlayerPtr);
 
-			uint64_t curEnt = 0;
-			apex.Read<uint64_t>(entList + ((uint64_t)i << 5), curEnt);
-			if (curEnt == 0)continue;
-			if(curEnt == localPlayer)continue;
+			uint64_t curEntPtr = 0;
+			apex.Read<uint64_t>(entList + ((uint64_t)i << 5), curEntPtr);
+			if (curEntPtr == 0)continue;
+			Entity curEnt = Entity();
+
+			if(curEntPtr == localPlayerPtr)continue;
+			if (curEnt.isPlayer())
+			{
+				Player curEntPlayer = Player();
+				if(curEntPlayer.ptr != playerList[i].ptr)
+				{
+					playerList[i] = curEntPlayer;
+				}
+			}	
 		}
-	}
-	
+	}	
 }
 
 
@@ -150,14 +154,14 @@ static void aimBotThreadFunc()
 
 					if (testYaw >= 0.f || testYaw <= 180.f)
 					{
-						angle.y += diferenceYaw * smoothing;
+						angle.y += diferenceYaw / smoothing;
 					}
 					else if(testYaw >= -0.f || testYaw <-180.f)
 					{
-						angle.y -= diferenceYaw * smoothing;
+						angle.y -= diferenceYaw / smoothing;
 					}
 
-					angle.x += diferencePitch * smoothing;
+					angle.x += diferencePitch / smoothing;
 
 					//angle.x = ptich;
 			   	 	//angle.y = yaw;
@@ -197,6 +201,8 @@ static void aimBotThreadFunc()
 			Entity ent = ptrToEntity(entPtr);
 
 			if(!ent.isDummy())continue;
+			if (!ent.isVisible())continue;
+			
 
 			Vector localPlayerPos = localPlayer.getCamPosition();
 			Vector entPos = ent.getPosition();

@@ -16,6 +16,9 @@ public:
 	void setViewAngles(QAngle& angles);
 	void setViewAngles(SVector angles);
 	Vector getCamPosition();
+	float getVisibleTime();
+	bool isVisible();
+	float last_vis_time_flt;
 };
 
 class Player
@@ -31,7 +34,9 @@ public:
 	void setViewAngles(SVector angles);
 	Vector getCamPosition();
 	QAngle getRecoilAngles();
-
+	float getVisibleTime();
+	bool isVisible();
+	float last_vis_time_flt;
 };
 
 class Item

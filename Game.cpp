@@ -7,6 +7,8 @@ extern Memory apex;
 extern uint64_t apexBase;
 extern float smoothing;
 
+
+
 bool Entity::isPlayer()
 {
 	uint64_t entName;
@@ -311,8 +313,48 @@ QAngle calcAngles(Player player, Entity target)
 	//	angle.y += diferenceYaw / smoothing;
 	//}
 
-	angle.y += diferenceYaw * smoothing;
-	angle.x += diferencePitch * smoothing;
+	//angle.y = (3.5f / (1+diferenceYaw)) * sin(((2.f * M_PI_F) / -5.8f) * diferenceYaw);
+	//angle.y += diferenceYaw / smoothing;
+	angle.x += diferencePitch / smoothing;
 	angle.z = 0.f;
 	return angle;
+}
+
+//credit: https://www.unknowncheats.me/forum/apex-legends/410912-apex-legends-external-vis-check.html
+float Entity::getVisibleTime()
+{
+	float lastVisible;
+	apex.Read<float>(ptr+OFFSET_VISIBLE_TIME,lastVisible);
+	return lastVisible;
+}
+
+bool Entity::isVisible()
+{
+	const auto vis_check = getVisibleTime( );
+ 
+  // If the player was never visible the value is -1
+  const auto is_vis = vis_check > last_vis_time_flt || vis_check < 0.f && last_vis_time_flt > 0.f;
+ 
+  last_vis_time_flt = vis_check;
+ 
+  return is_vis;
+}
+
+float Player::getVisibleTime()
+{
+	float lastVisible;
+	apex.Read<float>(ptr+OFFSET_VISIBLE_TIME,lastVisible);
+	return lastVisible;
+}
+
+bool Player::isVisible()
+{
+	const auto vis_check = getVisibleTime( );
+ 
+  // If the player was never visible the value is -1
+  const auto is_vis = vis_check > last_vis_time_flt || vis_check < 0.f && last_vis_time_flt > 0.f;
+ 
+  last_vis_time_flt = vis_check;
+ 
+  return is_vis;
 }
