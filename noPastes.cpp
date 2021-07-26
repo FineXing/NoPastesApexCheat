@@ -29,7 +29,7 @@ float maxDelta = 80.f;
 bool rcs = true;
 float rcsX = 100.f;
 float rcsY = 100.f;
-float smoothing = 100.f;
+float smoothing = 0.4;
 
 bool lookingForProcs = true; //read write - controls when cheat starts
 
@@ -150,14 +150,14 @@ static void aimBotThreadFunc()
 
 					if (testYaw >= 0.f || testYaw <= 180.f)
 					{
-						angle.y += diferenceYaw / smoothing;
+						angle.y += diferenceYaw * smoothing;
 					}
 					else if(testYaw >= -0.f || testYaw <-180.f)
 					{
-						angle.y -= diferenceYaw / smoothing;
+						angle.y -= diferenceYaw * smoothing;
 					}
 
-					angle.x += diferencePitch / smoothing;
+					angle.x += diferencePitch * smoothing;
 
 					//angle.x = ptich;
 			   	 	//angle.y = yaw;

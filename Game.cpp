@@ -311,8 +311,8 @@ QAngle calcAngles(Player player, Entity target)
 	//	angle.y += diferenceYaw / smoothing;
 	//}
 
-	angle.y += diferenceYaw / smoothing;
-	angle.x += diferencePitch / smoothing;
+	angle.y += diferenceYaw * smoothing;
+	angle.x += diferencePitch * smoothing;
 	angle.z = 0.f;
 	return angle;
 }
