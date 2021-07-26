@@ -287,7 +287,7 @@ QAngle calcAngles(Player player, Entity target)
 {
 	QAngle angle = QAngle();
 	QAngle oldVAngles = player.getViewAngles();
-	Vector shit = player.getCamPosition() - target.getPosition();
+	Vector shit = target.getPosition() -player.getCamPosition() ;
 
 	
 	//find hypo. c = hypo
