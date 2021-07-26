@@ -216,14 +216,14 @@ static void aimBotThreadFunc()
 
 			float diferencePitch = ptich - oldVAngles.x;
 			float diferenceYaw = yaw - oldVAngles.y;
-			float delta  = sqrt(pow(diferenceYaw,2) + pow(diferencePitch,2));
+			float delta  = sqrt(pow(diferenceYaw, 2) + pow(diferencePitch, 2));
 
 			//unnessasary given the next check but its still here
 			if(c > maxDelta)
 			{
 				continue;
 			}
-			if(c<bestTargetDelta)
+			if(c < bestTargetDelta)
 			{
 				printf("target found. delta = %F\n",c);
 				bestTarget = ent;
