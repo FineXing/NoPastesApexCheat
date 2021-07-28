@@ -301,6 +301,8 @@ QAngle calcAngles(Player player, Entity target)
 
 	float diferencePitch = ptich - oldVAngles.x;
 	float diferenceYaw = yaw - oldVAngles.y;
+	
+	float delta = sqrt(pow(diferenceYaw,2.f)+pow( diferencePitch,2.f));
 
 	//float testYaw = getAngle(angle.y);
 
@@ -314,8 +316,8 @@ QAngle calcAngles(Player player, Entity target)
 	//}
 
 	//angle.y = (3.5f / (1+diferenceYaw)) * sin(((2.f * M_PI_F) / -5.8f) * diferenceYaw);
-	//angle.y += diferenceYaw / smoothing;
-	angle.x += diferencePitch / smoothing;
+	angle.y += diferenceYaw + delta/smoothing;
+	angle.x += diferencePitch + delta/smoothing;
 	angle.z = 0.f;
 	return angle;
 }
@@ -324,7 +326,7 @@ QAngle calcAngles(Player player, Entity target)
 float Entity::getVisibleTime()
 {
 	float lastVisible;
-	apex.Read<float>(ptr+OFFSET_VISIBLE_TIME,lastVisible);
+	apex.Read<float>(ptr + OFFSET_VISIBLE_TIME, lastVisible);
 	return lastVisible;
 }
 

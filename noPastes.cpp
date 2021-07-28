@@ -65,7 +65,7 @@ static void updatePlayerList()
 				{
 					playerList[i] = curEntPlayer;
 				}
-			}	
+			}
 		}
 	}	
 }
@@ -201,8 +201,10 @@ static void aimBotThreadFunc()
 			Entity ent = ptrToEntity(entPtr);
 
 			if(!ent.isDummy())continue;
-			if (!ent.isVisible())continue;
-			
+			if (!ent.isVisible())
+			{
+				continue;
+			}
 
 			Vector localPlayerPos = localPlayer.getCamPosition();
 			Vector entPos = ent.getPosition();
@@ -219,10 +221,11 @@ static void aimBotThreadFunc()
 			float ptich = (-(atan2(shit.z, c)))*(180/M_PI);
 
 
+			QAngle diferenceAngles = {ptich, yaw ,0.f};
+			diferenceAngles = diferenceAngles - oldVAngles;
 
-			float diferencePitch = ptich - oldVAngles.x;
-			float diferenceYaw = yaw - oldVAngles.y;
-			float delta  = sqrt(pow(diferenceYaw, 2) + pow(diferencePitch, 2));
+			float delta = sqrt(pow(diferenceAngles.x,2.f)+pow( diferenceAngles.y,2.f));
+
 
 			//unnessasary given the next check but its still here
 			if(delta > maxDelta)
