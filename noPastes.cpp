@@ -295,7 +295,7 @@ static void playerGlowThread()
 		}
 		std::this_thread::sleep_for(std::chrono::milliseconds(600));
 	}
-
+	
 	while (lookingForProcs == false&&v1 == false)
 	{
 		while (glowPlayersEnabled)
@@ -310,7 +310,9 @@ static void playerGlowThread()
 				Entity ent = ptrToEntity(entPtr);
 				if (ent.isPlayer())
 				{
-					ent.enableGlow(0,122,0);
+					Player curPlayer = ptrToPlayer(ent.ptr);
+					GlowMode shitty = { 139,125,113,127 };
+					curPlayer.enableGlow(0,122,0,shitty);
 				}
 			}
 			std::this_thread::sleep_for(std::chrono::milliseconds(600));

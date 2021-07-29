@@ -55,7 +55,6 @@ void Entity::enableGlow(float R, float G, float B)
 {
 	apex.Write<int>(ptr + OFFSET_GLOW_ENABLE, 1);
 	apex.Write<int>(ptr + OFFSET_GLOW_THROUGH_WALLS, 2);
-	apex.Write<GlowMode>(ptr + GLOW_TYPE, { 101,102,46,96 });
 	apex.Write<float>(ptr + GLOW_COLOR_R, R);
 	apex.Write<float>(ptr + GLOW_COLOR_G, G);
 	apex.Write<float>(ptr + GLOW_COLOR_B, B);
@@ -100,7 +99,6 @@ void Item::enableGlow(float R, float G, float B)
 {
 	apex.Write<int>(ptr + OFFSET_GLOW_ENABLE, 1);
 	apex.Write<int>(ptr + OFFSET_GLOW_THROUGH_WALLS, 2);
-	apex.Write<GlowMode>(ptr + GLOW_TYPE, { 101,102,46,96 });
 	apex.Write<float>(ptr + GLOW_COLOR_R, R);
 	apex.Write<float>(ptr + GLOW_COLOR_G, G);
 	apex.Write<float>(ptr + GLOW_COLOR_B, B);
@@ -159,11 +157,11 @@ uintptr_t getBestEnemey()
 	}
 }
 
-void Player::enableGlow(float R, float G, float B)
+void Player::enableGlow(float R, float G, float B,GlowMode shitty)
 {
 	apex.Write<int>(ptr + OFFSET_GLOW_ENABLE, 1);
 	apex.Write<int>(ptr + OFFSET_GLOW_THROUGH_WALLS, 2);
-	apex.Write<GlowMode>(ptr + GLOW_TYPE, { 139,125,113,127 });
+	apex.Write<GlowMode>(ptr + GLOW_TYPE, shitty);
 	apex.Write<float>(ptr + GLOW_COLOR_R, R);
 	apex.Write<float>(ptr + GLOW_COLOR_G, G);
 	apex.Write<float>(ptr + GLOW_COLOR_B, B);

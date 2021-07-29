@@ -25,7 +25,7 @@ class Player
 {
 public:
 	uint64_t ptr;
-	void enableGlow(float R, float G, float B);
+	void enableGlow(float R, float G, float B, GlowMode shitty);
 	bool isGlowing();
 	float getDistance();
 	Vector getPosition();
