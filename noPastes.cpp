@@ -33,9 +33,16 @@ float smoothing = 100.f;
 
 bool lookingForProcs = true; //read write - controls when cheat starts
 
+typedef struct player
+{
+	uint64_t playerPtr;
+	float locX;
+	float locY;
+	float locZ;
+	int team = 0;
 
+}player;
 
-Player playerList[100];
 
 //UNUSED UNTESTED AS OF RN
 static void updatePlayerList()
@@ -45,29 +52,18 @@ static void updatePlayerList()
 	{
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
-		for(int i = 0; i<100;i++)
+		for(int i = 0; i<=100;i++)
 		{
-			uint64_t localPlayerPtr = 0;
-			apex.Read<uint64_t>(apexBase + OFFSET_LOCAL_ENT, localPlayerPtr);
-			if(localPlayerPtr == 0)continue;
-			Player localPlayer = ptrToPlayer(localPlayerPtr);
+			uint64_t localPlayer = 0;
+			apex.Read<uint64_t>(apexBase + OFFSET_LOCAL_ENT, localPlayer);
 
-			uint64_t curEntPtr = 0;
-			apex.Read<uint64_t>(entList + ((uint64_t)i << 5), curEntPtr);
-			if (curEntPtr == 0)continue;
-			Entity curEnt = Entity();
-
-			if(curEntPtr == localPlayerPtr)continue;
-			if (curEnt.isPlayer())
-			{
-				Player curEntPlayer = Player();
-				if(curEntPlayer.ptr != playerList[i].ptr)
-				{
-					playerList[i] = curEntPlayer;
-				}
-			}
+			uint64_t curEnt = 0;
+			apex.Read<uint64_t>(entList + ((uint64_t)i << 5), curEnt);
+			if (curEnt == 0)continue;
+			if(curEnt == localPlayer)continue;
 		}
-	}	
+	}
+	
 }
 
 
@@ -135,7 +131,7 @@ static void aimBotThreadFunc()
 
 				printf("oldVAngles.x: %f oldVAngles.y: %f oldVAngles.z: %f", oldVAngles.x,oldVAngles.y,oldVAngles.z);
 
-				if (false)
+				if (true)
 				{
 					//shit = ent pos relitive to localplayer
 					Vector shit = entPos - localPlayerPos;
@@ -173,9 +169,38 @@ static void aimBotThreadFunc()
             		angle.y = angle.y + (oldRecoilAngle.y - recoilAngles.y)*(rcsY/100.f);
 				}
 				angle = clampAngles(angle);
+				
 
+				unsigned int Input{0x1cbc520};
+				uintptr_t  m_pCommands{ apex.Read<uintptr_t>((apexBase + Input + 0xF8)) };
+				auto first_command_number{ apex.Read<int>(m_pCommands) };
+				//printf("1");
+				while (first_command_number == apex.Read<int>(m_pCommands)); //verifies that current usercmd is latest
+					//printf("2");
+				auto next_cmd_number{ apex.Read<int>(m_pCommands + 0x218) + 1 };
+				while (true) 
+				{
+					//Printf("3");
+					uintptr_t old_command{ m_pCommands  +  ((next_cmd_number - 1) % 750) *0x218 };
+					uintptr_t current_command{ m_pCommands +  (next_cmd_number % 750) *0x218 }; //pUserCmd 
+					while (next_cmd_number != apex.Read<int>(current_command)); 
+					{
+						//printf("4");
+						if(true)
+						{
+							//printf("5");
+							apex.Write<int>(old_command + 0x38, 1); //Write to buttons
+							apex.Write<SVector>(old_command + 0xC, SVector(angle));
+							angle.x = 0.f;
+							angle.y = 0.f;
+						}
+						//Vector2 Test = apex.Read<Vector2>(old_command + 0xC);
+						//printf("%f/%f/%f \n", Test .x, Test .y);
+						next_cmd_number = apex.Read<int>(current_command) + 1;
+					}
+				}
 				//setting angles
-				localPlayer.setViewAngles(angle);
+				//localPlayer.setViewAngles(angle);
 				oldRecoilAngle = recoilAngles;	
 			}
 		}
@@ -201,10 +226,6 @@ static void aimBotThreadFunc()
 			Entity ent = ptrToEntity(entPtr);
 
 			if(!ent.isDummy())continue;
-			if (!ent.isVisible())
-			{
-				continue;
-			}
 
 			Vector localPlayerPos = localPlayer.getCamPosition();
 			Vector entPos = ent.getPosition();
@@ -221,11 +242,10 @@ static void aimBotThreadFunc()
 			float ptich = (-(atan2(shit.z, c)))*(180/M_PI);
 
 
-			QAngle diferenceAngles = {ptich, yaw ,0.f};
-			diferenceAngles = diferenceAngles - oldVAngles;
 
-			float delta = sqrt(pow(diferenceAngles.x,2.f)+pow( diferenceAngles.y,2.f));
-
+			float diferencePitch = ptich - oldVAngles.x;
+			float diferenceYaw = yaw - oldVAngles.y;
+			float delta  = sqrt(pow(diferenceYaw, 2) + pow(diferencePitch, 2));
 
 			//unnessasary given the next check but its still here
 			if(delta > maxDelta)
@@ -295,7 +315,7 @@ static void playerGlowThread()
 		}
 		std::this_thread::sleep_for(std::chrono::milliseconds(600));
 	}
-	
+
 	while (lookingForProcs == false&&v1 == false)
 	{
 		while (glowPlayersEnabled)
@@ -310,9 +330,7 @@ static void playerGlowThread()
 				Entity ent = ptrToEntity(entPtr);
 				if (ent.isPlayer())
 				{
-					Player curPlayer = ptrToPlayer(ent.ptr);
-					GlowMode shitty = { 139,125,113,127 };
-					curPlayer.enableGlow(0,122,0,shitty);
+					ent.enableGlow(0,122,0);
 				}
 			}
 			std::this_thread::sleep_for(std::chrono::milliseconds(600));

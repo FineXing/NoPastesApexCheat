@@ -157,7 +157,7 @@ uintptr_t getBestEnemey()
 	}
 }
 
-void Player::enableGlow(float R, float G, float B,GlowMode shitty)
+void Player::enableGlow(float R, float G, float B, GlowMode shitty)
 {
 	apex.Write<int>(ptr + OFFSET_GLOW_ENABLE, 1);
 	apex.Write<int>(ptr + OFFSET_GLOW_THROUGH_WALLS, 2);
