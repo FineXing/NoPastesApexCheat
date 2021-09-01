@@ -11,10 +11,10 @@ typedef uint8_t* PBYTE;
 typedef uint8_t BYTE;
 typedef unsigned long DWORD;
 typedef unsigned short WORD;
-typedef WORD *PWORD;
+typedef WORD* PWORD;
 
-static CloneablePhysicalMemoryObj *conn = 0;
-static Kernel *kernel = 0;
+static CloneablePhysicalMemoryObj* conn = 0;
+static Kernel* kernel = 0;
 
 inline bool isMatch(const PBYTE addr, const PBYTE pat, const PBYTE msk)
 {
@@ -65,7 +65,7 @@ public:
 	void close_proc();
 
 	template<typename T>
-	bool Read(uint64_t address, T& out);
+	T Read(uint64_t address);
 
 	template<typename T>
 	bool ReadArray(uint64_t address, T out[], size_t len);
@@ -76,7 +76,7 @@ public:
 	template<typename T>
 	bool WriteArray(uint64_t address, const T value[], size_t len);
 
-	uint64_t ScanPointer(uint64_t ptr_address, const uint32_t offsets[], int level);
+	//uint64_t ScanPointer(uint64_t ptr_address, const uint32_t offsets[], int level);
 };
 
 template<typename T>
@@ -84,6 +84,16 @@ inline bool Memory::Read(uint64_t address, T& out)
 {
 	std::lock_guard<std::mutex> l(m);
 	return mem && virt_read_raw_into(mem, address, (uint8_t*)&out, sizeof(T)) == 0;
+}
+
+template<typename T>
+T Memory::Read(uint64_t address)
+{
+	T out;
+	std::lock_guard<std::mutex> l(m);
+
+	virt_read_raw_into(mem, address, (uint8_t*)&out, sizeof(T)) == 0;
+	return out;
 }
 
 template<typename T>
